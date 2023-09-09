@@ -1,13 +1,13 @@
-local utils = require('utils')
+local names = require 'data.names'
 
 local building = table.deepcopy(data.raw['constant-combinator']['constant-combinator'])
-building.name = utils.mod_prefix .. 'reader'
+building.name = names.reader.BUILDING
 building.localised_name = 'Flash card reader'
 building.item_slot_count = 1
 
 local item = {
     type = 'item',
-    name = building.name,
+    name = names.reader.ITEM,
     localised_name = building.localised_name,
     stack_size = 50,
     icon = '__base__/graphics/icons/constant-combinator.png',
@@ -18,7 +18,7 @@ local item = {
 
 local recipe = {
     type = 'recipe',
-    name = item.name,
+    name = names.reader.RECIPE,
     icon = item.icon,
     icon_size = item.icon_size,
     ingredients = {
@@ -29,13 +29,8 @@ local recipe = {
     energy_required = 1
 }
 
-local function register()
-    data:extend({ item, recipe, building })
-end
-
 return {
-    register = register,
-    item = item,
-    recipe = recipe,
-    building = building
+    register = function()
+        data:extend({ item, recipe, building })
+    end
 }

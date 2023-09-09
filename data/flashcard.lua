@@ -1,8 +1,8 @@
-local utils = require('utils')
+local names = require 'data.names'
 
 local item = {
-    type = 'item',
-    name = utils.mod_prefix .. 'flashcard',
+    type = 'item-with-tags',
+    name = names.flashcard.ITEM,
     icon = '__base__/graphics/icons/water-wube.png',
     icon_size = 32,
     subgroup = 'circuit-network',
@@ -13,15 +13,15 @@ local item = {
 
 local recipe = {
     type = 'recipe',
-    name = item.name,
+    name = names.flashcard.RECIPE,
     result = item.name,
     ingredients = {
         { 'electronic-circuit', 1 }
     }
 }
 
-local function register()
-    data:extend({ item, recipe })
-end
-
-return { register = register, item = item, recipe = recipe }
+return {
+    register = function()
+        data:extend({ item, recipe })
+    end
+}
