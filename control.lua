@@ -1,10 +1,13 @@
 local names = require 'data.names'
 local writer = require 'control.writer'
+local reader = require 'control.reader'
 
 local function on_built(event)
     local entity = event.created_entity or event.entity
     if entity.name == names.writer.BUILDING then
         writer.on_built(entity)
+    elseif entity.name == names.reader.CONTAINER then
+        reader.on_built(entity)
     end
 end
 
@@ -12,11 +15,14 @@ local function on_destroyed(event)
     local entity = event.entity
     if entity.name == names.writer.BUILDING then
         writer.on_destroyed(entity)
+    elseif entity.name == names.reader.CONTAINER then
+        reader.on_destroyed(reader)
     end
 end
 
 local function on_tick()
     writer.on_tick()
+    reader.on_tick()
 end
 
 script.on_event(defines.events.on_built_entity, on_built)

@@ -18,6 +18,18 @@ local function build_description(signals)
     return table.concat(builder, '\n')
 end
 
+local function convert_signals(signals)
+    local result = {}
+    for i = 1, #signals do
+        table.insert(result, {
+            index = i,
+            signal = signals[i].signal,
+            count = signals[i].count
+        })
+    end
+    return result
+end
+
 function _M.is_initialized(flashcard)
     return flashcard.get_tag(INIT_FLAG) == true
 end
@@ -25,13 +37,13 @@ end
 function _M.save_data(flashcard, signals)
     if flashcard.get_tag(INIT_FLAG) ~= true then
         flashcard.set_tag(INIT_FLAG, true)
-        flashcard.set_tag(SIGNALS, signals)
+        flashcard.set_tag(SIGNALS, convert_signals(signals))
         flashcard.custom_description = build_description(signals)
     end
 end
 
 function _M.read_data(flashcard)
-
+    return flashcard.get_tag(SIGNALS) or {}
 end
 
 return _M

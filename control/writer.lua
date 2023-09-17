@@ -6,7 +6,6 @@ local _M = {}
 function _M.on_built(writer)
     local surface = writer.surface
     local position = writer.position
-    position.x = position.x;
     local receiver = surface.create_entity {
         name = names.writer.SIGNAL_RECEIVER,
         position = position,

@@ -1,18 +1,25 @@
 local names = require 'data.names'
 
-local building = table.deepcopy(data.raw['constant-combinator']['constant-combinator'])
-building.name = names.reader.BUILDING
-building.localised_name = 'Flash card reader'
-building.item_slot_count = 1
+local inventory = table.deepcopy(data.raw['container']['wooden-chest'])
+inventory.name = names.reader.CONTAINER
+inventory.localised_name = 'Flash card reader'
+inventory.inventory_size = 1
+inventory.enable_inventory_bar = false
+
+local signal_sender = table.deepcopy(data.raw['constant-combinator']['constant-combinator'])
+signal_sender.name = names.reader.SIGNAL_SENDER
+signal_sender.flags = { 'placeable-off-grid' }
+signal_sender.collision_mask = {}
+signal_sender.selection_priority = 60
 
 local item = {
     type = 'item',
     name = names.reader.ITEM,
-    localised_name = building.localised_name,
+    localised_name = inventory.localised_name,
     stack_size = 50,
     icon = '__base__/graphics/icons/constant-combinator.png',
     icon_size = 64,
-    place_result = building.name,
+    place_result = inventory.name,
     subgroup = 'circuit-network',
 }
 
@@ -31,6 +38,6 @@ local recipe = {
 
 return {
     register = function()
-        data:extend({ item, recipe, building })
+        data:extend({ item, recipe, inventory, signal_sender })
     end
 }
