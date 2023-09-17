@@ -1,20 +1,21 @@
-local names = {};
-names.MOD_PREFIX = 'flashcards-'
+local _M = {};
 
-names.flashcard = {}
-names.flashcard.ITEM = names.MOD_PREFIX .. 'flashcard'
-names.flashcard.RECIPE = names.flashcard.ITEM
+_M.MOD_PREFIX = 'flashcards-'
 
-names.writer = {}
-names.writer.WRITE_RECIPE = names.MOD_PREFIX .. 'write-recipe'
-names.writer.BUILDING = names.MOD_PREFIX .. 'writer'
-names.writer.ITEM = names.writer.BUILDING
-names.writer.RECIPE = names.writer.ITEM
-names.writer.SIGNAL_RECEIVER = names.MOD_PREFIX .. 'writer-signal-receiver'
+_M.flashcard = {}
+_M.flashcard.ITEM = _M.MOD_PREFIX .. 'flashcard'
+_M.flashcard.RECIPE = _M.flashcard.ITEM
 
-names.reader = {}
-names.reader.BUILDING = names.MOD_PREFIX .. 'reader'
-names.reader.ITEM = names.reader.BUILDING
-names.reader.RECIPE = names.reader.BUILDING
+_M.writer = {}
+_M.writer.WRITE_RECIPE = _M.MOD_PREFIX .. 'write-recipe'
+_M.writer.BUILDING = _M.MOD_PREFIX .. 'writer'
+_M.writer.ITEM = _M.writer.BUILDING
+_M.writer.RECIPE = _M.writer.ITEM
+_M.writer.SIGNAL_RECEIVER = _M.MOD_PREFIX .. 'writer-signal-receiver'
 
-return names;
+_M.reader = {}
+_M.reader.BUILDING = _M.MOD_PREFIX .. 'reader'
+_M.reader.ITEM = _M.reader.BUILDING
+_M.reader.RECIPE = _M.reader.BUILDING
+
+return _M;

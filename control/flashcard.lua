@@ -1,0 +1,37 @@
+local names = require 'data.names'
+
+local _M = {}
+
+
+local INIT_FLAG = names.MOD_PREFIX .. 'initialized'
+local SIGNALS = names.MOD_PREFIX .. 'signals'
+
+local function build_description(signals)
+    local builder = { "Initialized" }
+    if signals ~= nil then
+        for _, signal in pairs(signals) do
+            local name = signal.signal.name
+            local count = tostring(signal.count)
+            table.insert(builder, name .. ": " .. count)
+        end
+    end
+    return table.concat(builder, '\n')
+end
+
+function _M.is_initialized(flashcard)
+    return flashcard.get_tag(INIT_FLAG) == true
+end
+
+function _M.save_data(flashcard, signals)
+    if flashcard.get_tag(INIT_FLAG) ~= true then
+        flashcard.set_tag(INIT_FLAG, true)
+        flashcard.set_tag(SIGNALS, signals)
+        flashcard.custom_description = build_description(signals)
+    end
+end
+
+function _M.read_data(flashcard)
+
+end
+
+return _M
