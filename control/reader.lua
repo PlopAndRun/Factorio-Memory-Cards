@@ -7,7 +7,6 @@ local _M = {}
 function _M.on_built(reader)
     local surface = reader.surface
     local position = reader.position
-    position.x = position.x + 1
     local sender = surface.create_entity {
         name = names.reader.SIGNAL_SENDER,
         position = position,
@@ -38,6 +37,13 @@ function _M.on_tick()
             local control_behavior = reader.sender.get_or_create_control_behavior()
             control_behavior.parameters = {}
         end
+    end
+end
+
+function _M.on_gui_opened(entity, player_index)
+    local chest = entity.surface.find_entity(names.reader.CONTAINER, entity.position)
+    if chest then 
+        game.get_player(player_index).opened = chest
     end
 end
 
