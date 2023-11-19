@@ -1,8 +1,14 @@
 local names = require 'data.names'
 local graphics = require 'graphics.definitions'
 
+local writing_recipe_category = {
+    type = 'recipe-category',
+    name = names.writer.RECIPE_CATEGORY
+}
+
 local writing_recipe = {
     type = 'recipe',
+    category = writing_recipe_category.name,
     name = names.writer.WRITE_RECIPE,
     ingredients = {
         { names.flashcard.ITEM, 1 }
@@ -16,26 +22,46 @@ local writing_recipe = {
     allow_intermediates = false,
 }
 
-local building = table.deepcopy(data.raw['assembling-machine']['assembling-machine-1'])
-building.name = names.writer.BUILDING
-building.localised_name = 'Flash card writer'
-building.fixed_recipe = writing_recipe.name
-building.ingredient_count = 1
-building.energy_usage = '1W'
-building.crafting_speed = 1
-building.crafting_categories = { 'crafting' }
-building.show_recipe_icon = false
-building.fast_replaceable_group = nil
-building.next_upgrade = nil
-building.additional_pastable_entities = nil
+local building = {
+    type = 'furnace',
+    name = names.writer.BUILDING,
+    localised_name = 'Flash card writer',
+    energy_usage = '50W',
+    crafting_speed = 1.0,
+    crafting_categories = { writing_recipe_category.name },
+    show_recipe_icon = false,
+    energy_source = { type = 'electric', usage_priority = 'secondary-input' },
+    allowed_effects = 'speed',
+    always_draw_idle_animation = true,
+    idle_animation = graphics.writer_entity.idle_animation,
+    working_visualisations = { {
+        render_layer = 'object',
+        animation = graphics.writer_entity.crafting_animation,
+        always_draw = false
+    } },
+    minable = { mining_time = 0.5, result = names.writer.ITEM },
+    match_animation_speed_to_activity = false,
+    show_recipe_icon_on_map = false,
+    module_specifications = { module_slots = 1 },
+    icons = { graphics.writer_item },
+    collision_box = { { -0.4, -0.9 }, { 0.4, 0.9 } },
+    collision_mask = { 'item-layer', 'object-layer', 'player-layer', 'water-tile' },
+    selection_box = { { 0, 0 }, { 0, 0 } },
+    subgroup = 'circuit-network',
+    allow_copy_paste = true,
+    selectable_in_game = true,
+    selection_priority = 0,
+    placeable_by = { item = names.writer.ITEM, count = 1 },
+    source_inventory_size = 1,
+    result_inventory_size = 1,
+}
 
 local item = {
     type = 'item',
     name = names.writer.ITEM,
     localised_name = building.localised_name,
     stack_size = 50,
-    icon = '__base__/graphics/icons/assembling-machine-1.png',
-    icon_size = 64,
+    icons = { graphics.writer_item },
     place_result = building.name,
     subgroup = 'circuit-network',
 }
@@ -54,33 +80,35 @@ local recipe = {
 }
 
 local connection_point = {
-    wire = {
-        red = { 0, 0 },
-        green = { 0, 0 }
-    },
-    shadow = {
-        red = { 0, 0 },
-        green = { 0, 0 }
-    }
+    red = { 0, 1 },
+    green = { 0.1, 1 }
 }
 
-local signal_receiver = table.deepcopy(data.raw['lamp']['small-lamp'])
-signal_receiver.name = names.writer.SIGNAL_RECEIVER;
-signal_receiver.flags = { 'placeable-off-grid' };
-signal_receiver.collision_mask = {};
-signal_receiver.circuit_wire_max_distance = 3;
-signal_receiver.circuit_wire_connection_points = { connection_point, connection_point, connection_point, connection_point };
-signal_receiver.sticker_box = { { -0.5, -0.5 }, { 0.5, 0.5 } };
-signal_receiver.selection_priority = 60;
-
--- signal_receiver.picture_on = graphics.transparent;
--- signal_receiver.picture_off = graphics.transparent;
-signal_receiver.energy_usage_per_tick = '1W';
-signal_receiver.energy_source = { type = 'void' };
+local signal_receiver = {
+    type = 'lamp',
+    flags = { 'placeable-off-grid' },
+    name = names.writer.SIGNAL_RECEIVER,
+    localised_name = building.localised_name,
+    localised_description = building.localised_description,
+    picture_on = building.idle_animation,
+    picture_off = building.idle_animation,
+    energy_usage_per_tick = '1W',
+    energy_source = { type = 'void' },
+    circuit_wire_connection_point = {
+        wire = connection_point,
+        shadow = connection_point
+    },
+    circuit_wire_max_distance = 9,
+    draw_circuit_wires = true,
+    always_on = true,
+    selectable_in_game = true,
+    selection_box = { { -0.5, -1 }, { 0.5, 1 } },
+}
 
 return {
     register = function()
         data:extend({
+            writing_recipe_category,
             item,
             building,
             recipe,

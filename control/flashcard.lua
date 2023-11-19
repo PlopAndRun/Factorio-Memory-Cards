@@ -2,7 +2,6 @@ local names = require 'data.names'
 
 local _M = {}
 
-
 local INIT_FLAG = names.MOD_PREFIX .. 'initialized'
 local SIGNALS = names.MOD_PREFIX .. 'signals'
 
@@ -19,6 +18,7 @@ local function build_description(signals)
 end
 
 local function convert_signals(signals)
+    if not signals then return {} end
     local result = {}
     for i = 1, #signals do
         table.insert(result, {

@@ -1,10 +1,10 @@
 local names = require 'data.names'
+local graphics = require 'graphics.definitions'
 
 local item = {
     type = 'item-with-tags',
     name = names.flashcard.ITEM,
-    icon = '__base__/graphics/icons/water-wube.png',
-    icon_size = 32,
+    icons = { graphics.flash_card_item },
     subgroup = 'circuit-network',
     stack_size = 1,
     localised_name = 'Flash card',

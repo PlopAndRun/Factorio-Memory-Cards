@@ -4,37 +4,38 @@ local flashcard = require 'control.flashcard'
 
 local _M = {}
 
-function _M.on_built(reader)
-    local surface = reader.surface
-    local position = reader.position
-    local sender = surface.create_entity {
-        name = names.reader.SIGNAL_SENDER,
+function _M.on_built(sender)
+    local surface = sender.surface
+    local position = sender.position
+    local reader = surface.create_entity {
+        name = names.reader.CONTAINER,
         position = position,
-        force = reader.force,
-        create_build_effect_smoke = false,
+        force = sender.force,
+        create_build_effect_smoke = false
     }
-    persistence.register_reader(reader, sender)
+    persistence.register_reader(sender, reader)
 end
 
 function _M.on_destroyed(reader)
     local holder = persistence.readers()[reader.unit_number]
     if holder then
-        persistence.delete_reader(reader)
+        persistence.delete_reader(holder)
         holder.sender.destroy()
+        holder.entity.destroy()
     end
 end
 
 function _M.on_tick()
-    for _, reader in pairs(persistence.readers()) do
-        local inventory = reader.entity.get_inventory(defines.inventory.chest)
+    for _, holder in pairs(persistence.readers()) do
+        local inventory = holder.reader.get_inventory(defines.inventory.chest)
         if not inventory.is_empty()
             and inventory[1].name == names.flashcard.ITEM
         then
-            local control_behavior = reader.sender.get_or_create_control_behavior()
+            local control_behavior = holder.sender.get_or_create_control_behavior()
             local data = flashcard.read_data(inventory[1]);
             control_behavior.parameters = data
         else
-            local control_behavior = reader.sender.get_or_create_control_behavior()
+            local control_behavior = holder.sender.get_or_create_control_behavior()
             control_behavior.parameters = {}
         end
     end

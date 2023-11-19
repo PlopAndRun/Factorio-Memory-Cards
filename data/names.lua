@@ -11,6 +11,7 @@ _M.writer.WRITE_RECIPE = _M.MOD_PREFIX .. 'write-recipe'
 _M.writer.BUILDING = _M.MOD_PREFIX .. 'writer'
 _M.writer.ITEM = _M.writer.BUILDING
 _M.writer.RECIPE = _M.writer.ITEM
+_M.writer.RECIPE_CATEGORY = _M.MOD_PREFIX .. 'write-recipe-category'
 _M.writer.SIGNAL_RECEIVER = _M.MOD_PREFIX .. 'writer-signal-receiver'
 
 _M.reader = {}
@@ -18,5 +19,10 @@ _M.reader.CONTAINER = _M.MOD_PREFIX .. 'reader'
 _M.reader.ITEM = _M.reader.CONTAINER
 _M.reader.RECIPE = _M.reader.CONTAINER
 _M.reader.SIGNAL_SENDER = _M.MOD_PREFIX .. 'reader-signal-sender'
+
+_M.gui = {}
+_M.gui.flashcard = {}
+_M.gui.flashcard.ROOT = _M.MOD_PREFIX .. 'gui-'
+_M.gui.flashcard.CLOSE = _M.gui.flashcard.ROOT .. 'close'
 
 return _M;
