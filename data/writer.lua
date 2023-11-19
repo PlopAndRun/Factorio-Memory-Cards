@@ -76,7 +76,7 @@ local recipe = {
         { 'assembling-machine-1', 1 }
     },
     result = item.name,
-    energy_required = 1,
+    energy_required = 1
 }
 
 local connection_point = {
@@ -98,6 +98,7 @@ local signal_receiver = {
         wire = connection_point,
         shadow = connection_point
     },
+    minable = { mining_time = 0.5 },
     circuit_wire_max_distance = 9,
     draw_circuit_wires = true,
     always_on = true,

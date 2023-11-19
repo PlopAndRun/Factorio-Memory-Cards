@@ -16,12 +16,12 @@ function _M.on_built(sender)
     persistence.register_reader(sender, reader)
 end
 
-function _M.on_destroyed(reader)
+function _M.on_destroyed(entity, player_index)
+    local reader = entity.surface.find_entity(names.reader.CONTAINER, entity.position)
     local holder = persistence.readers()[reader.unit_number]
     if holder then
         persistence.delete_reader(holder)
-        holder.sender.destroy()
-        holder.entity.destroy()
+        game.players[player_index].mine_entity(holder.reader, true)
     end
 end
 

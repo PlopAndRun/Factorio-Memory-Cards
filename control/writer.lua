@@ -15,11 +15,13 @@ function _M.on_built(writer)
     persistence.register_writer(writer, receiver)
 end
 
-function _M.on_destroyed(writer)
+function _M.on_destroyed(entity, player_index)
+    local writer = entity.surface.find_entity(names.writer.BUILDING, entity.position)
     local holder = persistence.writers()[writer.unit_number]
     if holder then
         persistence.delete_writer(holder)
-        holder.receiver.destroy()
+        local player = game.players[player_index]
+        player.mine_entity(holder.writer)
     end
 end
 

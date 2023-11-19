@@ -1,13 +1,6 @@
 local names = require 'data.names'
 local graphics = require 'graphics.definitions'
 
-local inventory = table.deepcopy(data.raw['container']['wooden-chest'])
-inventory.name = names.reader.CONTAINER
-inventory.localised_name = 'Flash card reader'
-inventory.inventory_size = 1
-inventory.enable_inventory_bar = false
-inventory.picture = graphics.transparent
-
 local inventory = {
     type = 'container',
     name = names.reader.CONTAINER,
@@ -15,7 +8,8 @@ local inventory = {
     picture = graphics.transparent,
     enable_inventory_bar = false,
     flags = { 'placeable-off-grid' },
-    selection_box = { { 0.5, 0.5 }, { 0.5, 0.5 } }
+    selection_box = { { 0.5, 0.5 }, { 0.5, 0.5 } },
+    minable = { mining_time = 1, result = names.reader.ITEM }
 }
 
 local connection_point = {
@@ -38,10 +32,7 @@ signal_sender.activity_led_sprites = graphics.reader_entity.active
 signal_sender.activity_led_light_offsets = { { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } }
 signal_sender.selection_priority = 40
 signal_sender.items_to_place_this = { names.reader.ITEM }
-signal_sender.minable = {
-    mining_time = 1,
-    result = names.reader.ITEM
-}
+signal_sender.minable = { mining_time = 1 }
 
 local item = {
     type = 'item',

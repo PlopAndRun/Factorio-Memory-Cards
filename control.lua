@@ -15,9 +15,9 @@ end
 local function on_destroyed(event)
     local entity = event.entity
     if entity.name == names.writer.BUILDING or entity.name == names.writer.SIGNAL_RECEIVER then
-        writer.on_destroyed(entity)
+        writer.on_destroyed(entity, event.player_index)
     elseif entity.name == names.reader.SIGNAL_SENDER or entity.name == names.reader.CONTAINER then
-        reader.on_destroyed(entity)
+        reader.on_destroyed(entity, event.player_index)
     end
 end
 
