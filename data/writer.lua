@@ -26,6 +26,7 @@ local building = {
     type = 'furnace',
     name = names.writer.BUILDING,
     localised_name = 'Flash card writer',
+    flags = { 'placeable-off-grid' },
     energy_usage = '50W',
     crafting_speed = 1.0,
     crafting_categories = { writing_recipe_category.name },
@@ -39,7 +40,7 @@ local building = {
         animation = graphics.writer_entity.crafting_animation,
         always_draw = false
     } },
-    minable = { mining_time = 0.5, result = names.writer.ITEM },
+    minable = { mining_time = 0.5 },
     match_animation_speed_to_activity = false,
     show_recipe_icon_on_map = false,
     module_specifications = { module_slots = 1 },
@@ -51,7 +52,6 @@ local building = {
     allow_copy_paste = true,
     selectable_in_game = true,
     selection_priority = 0,
-    placeable_by = { item = names.writer.ITEM, count = 1 },
     source_inventory_size = 1,
     result_inventory_size = 1,
 }
@@ -62,7 +62,7 @@ local item = {
     localised_name = building.localised_name,
     stack_size = 50,
     icons = { graphics.writer_item },
-    place_result = building.name,
+    place_result = names.writer.SIGNAL_RECEIVER,
     subgroup = 'circuit-network',
 }
 
@@ -86,7 +86,7 @@ local connection_point = {
 
 local signal_receiver = {
     type = 'lamp',
-    flags = { 'placeable-off-grid' },
+    flags = { 'player-creation' },
     name = names.writer.SIGNAL_RECEIVER,
     localised_name = building.localised_name,
     localised_description = building.localised_description,
@@ -98,12 +98,15 @@ local signal_receiver = {
         wire = connection_point,
         shadow = connection_point
     },
-    minable = { mining_time = 0.5 },
+    collision_box = { { -0.4, -0.9 }, { 0.4, 0.9 } },
+    collision_mask = { 'item-layer', 'object-layer', 'player-layer', 'water-tile' },
+    minable = { mining_time = 0.5, result = names.writer.ITEM },
     circuit_wire_max_distance = 9,
     draw_circuit_wires = true,
     always_on = true,
     selectable_in_game = true,
     selection_box = { { -0.5, -1 }, { 0.5, 1 } },
+    placeable_by = { item = names.writer.ITEM, count = 1 },
 }
 
 return {

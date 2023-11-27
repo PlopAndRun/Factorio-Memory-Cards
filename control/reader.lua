@@ -43,7 +43,7 @@ end
 
 function _M.on_gui_opened(entity, player_index)
     local chest = entity.surface.find_entity(names.reader.CONTAINER, entity.position)
-    if chest then 
+    if chest then
         game.get_player(player_index).opened = chest
     end
 end

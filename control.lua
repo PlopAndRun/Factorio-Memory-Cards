@@ -5,7 +5,7 @@ local flashcard = require 'control.flashcard'
 
 local function on_built(event)
     local entity = event.created_entity or event.entity
-    if entity.name == names.writer.BUILDING then
+    if entity.name == names.writer.BUILDING or entity.name == names.writer.SIGNAL_RECEIVER then
         writer.on_built(entity)
     elseif entity.name == names.reader.SIGNAL_SENDER then
         reader.on_built(entity)
@@ -46,6 +46,7 @@ local function on_gui_closed(event)
 end
 
 script.on_event(defines.events.on_built_entity, on_built)
+script.on_event(defines.events.on_robot_built_entity, on_built)
 
 script.on_event(defines.events.on_pre_player_mined_item, on_destroyed)
 script.on_event(defines.events.on_robot_pre_mined, on_destroyed)
