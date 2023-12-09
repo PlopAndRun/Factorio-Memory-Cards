@@ -9,7 +9,6 @@ local inventory = {
     enable_inventory_bar = false,
     flags = { 'placeable-off-grid' },
     selection_box = { { 0.5, 0.5 }, { 0.5, 0.5 } },
-    minable = { mining_time = 1, result = names.reader.ITEM }
 }
 
 local connection_point = {
@@ -32,7 +31,7 @@ signal_sender.activity_led_sprites = graphics.reader_entity.active
 signal_sender.activity_led_light_offsets = { { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } }
 signal_sender.selection_priority = 40
 signal_sender.items_to_place_this = { names.reader.ITEM }
-signal_sender.minable = { mining_time = 1 }
+signal_sender.minable = { mining_time = 1, result = names.reader.ITEM }
 
 local item = {
     type = 'item',

@@ -1,10 +1,14 @@
 local names = require 'data.names'
 local persistence = require 'persistence'
 local flashcard = require 'control.flashcard'
+local utils = require 'utils'
 
 local _M = {}
 
 function _M.on_built(sender)
+    local control_behavior = sender.get_or_create_control_behavior()
+    control_behavior.parameters = {}
+
     local surface = sender.surface
     local position = sender.position
     local reader = surface.create_entity {
@@ -21,7 +25,13 @@ function _M.on_destroyed(entity, player_index)
     local holder = persistence.readers()[reader.unit_number]
     if holder then
         persistence.delete_reader(holder)
-        game.players[player_index].mine_entity(holder.reader, true)
+        if player_index ~= nil then
+            game.players[player_index].mine_entity(holder.reader, true)
+        else
+            local inventory = holder.reader.get_inventory(defines.inventory.chest)
+            utils.spill_items(entity.surface, entity.position, entity.force, inventory)
+            holder.reader.destroy()
+        end
     end
 end
 

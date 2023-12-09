@@ -1,6 +1,7 @@
 local names = require 'data.names'
 local persistence = require 'persistence'
 local flashcard = require 'control.flashcard'
+local utils = require 'utils'
 local _M = {}
 
 function _M.on_built(entity)
@@ -27,16 +28,6 @@ function _M.on_built(entity)
     persistence.register_writer(writer, receiver)
 end
 
-local function spill_items(surface, position, force, inventory)
-    for _, index in pairs(inventory.get_contents()) do
-        local item = inventory[index]
-        local spilled = surface.spill_item_stack(position, item, false, force, false)
-        for _, entity in pairs(spilled) do
-            entity.order_deconstruction(force)
-        end
-    end
-end
-
 function _M.on_destroyed(entity, player_index)
     local surface = entity.surface
     local writer = surface.find_entity(names.writer.BUILDING, entity.position)
@@ -44,18 +35,17 @@ function _M.on_destroyed(entity, player_index)
     if holder then
         persistence.delete_writer(holder)
         if player_index ~= nil then
-            local player = game.players[player_index]
             -- TODO: overflow
-            player.mine_entity(holder.writer, true)
+            game.players[player_index].mine_entity(holder.writer, true)
         else
-            spill_items(surface, entity.position, entity.force,
+            utils.spill_items(surface, entity.position, entity.force,
                 holder.writer.get_inventory(defines.inventory.furnace_source))
-            spill_items(surface, entity.position, entity.force,
+            utils.spill_items(surface, entity.position, entity.force,
                 holder.writer.get_inventory(defines.inventory.furnace_result))
             if holder.writer.is_crafting() then
                 local temp_inventory = game.create_inventory(1)
                 temp_inventory.insert{name=names.flashcard.ITEM, count=1}
-                spill_items(surface, entity.position, entity.force, temp_inventory)
+                utils.spill_items(surface, entity.position, entity.force, temp_inventory)
                 temp_inventory.destroy()
             end
             holder.writer.destroy()
