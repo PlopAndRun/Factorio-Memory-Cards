@@ -56,6 +56,17 @@ return {
                 animation_speed = 0.125,
                 max_advance = 1,
             },
+        },
+        ready_animation = {
+            filenmae = graphics('writer-entity.png'),
+            size = { 42, 69 },
+            position = { 126, 0 },
+            hr_version = {
+                filename = graphics('writer-entity-hr.png'),
+                size = { 84, 138 },
+                position = { 252, 0 },
+                scale = 0.5,
+            },
         }
     },
     writer_item = {

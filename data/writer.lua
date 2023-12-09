@@ -109,6 +109,10 @@ local signal_receiver = {
     placeable_by = { item = names.writer.ITEM, count = 1 },
 }
 
+local animation = table.deepcopy(graphics.writer_entity.ready_animation)
+animation.type = 'animation'
+animation.name = names.writer.READY_ANIMATION
+
 return {
     register = function()
         data:extend({
@@ -118,6 +122,7 @@ return {
             recipe,
             writing_recipe,
             signal_receiver,
+            animation,
         });
     end
 }

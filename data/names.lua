@@ -13,6 +13,7 @@ _M.writer.ITEM = _M.writer.BUILDING
 _M.writer.RECIPE = _M.writer.ITEM
 _M.writer.RECIPE_CATEGORY = _M.MOD_PREFIX .. 'write-recipe-category'
 _M.writer.SIGNAL_RECEIVER = _M.MOD_PREFIX .. 'writer-signal-receiver'
+_M.writer.READY_ANIMATION = _M.MOD_PREFIX .. 'writer-ready-animation'
 
 _M.reader = {}
 _M.reader.CONTAINER = _M.MOD_PREFIX .. 'reader'

@@ -4,7 +4,7 @@ local flashcard = require 'control.flashcard'
 local utils = require 'utils'
 local _M = {}
 
-local function find_writer(entity) 
+local function find_writer(entity)
     return entity.surface.find_entity(names.writer.BUILDING, entity.position)
 end
 
@@ -48,7 +48,7 @@ function _M.on_destroyed(entity, player_index)
                 holder.writer.get_inventory(defines.inventory.furnace_result))
             if holder.writer.is_crafting() then
                 local temp_inventory = game.create_inventory(1)
-                temp_inventory.insert{name=names.flashcard.ITEM, count=1}
+                temp_inventory.insert { name = names.flashcard.ITEM, count = 1 }
                 utils.spill_items(surface, entity.position, entity.force, temp_inventory)
                 temp_inventory.destroy()
             end
@@ -67,12 +67,24 @@ end
 function _M.on_tick()
     for _, holder in pairs(persistence.writers()) do
         local inventory = holder.writer.get_output_inventory()
-        if not inventory.is_empty()
-            and inventory[1].name == names.flashcard.ITEM
-            and not flashcard.is_initialized(inventory[1])
-        then
-            local signals = holder.receiver.get_merged_signals();
-            flashcard.save_data(inventory[1], signals)
+        if not inventory.is_empty() then
+            if not flashcard.is_initialized(inventory[1]) and inventory[1].name == names.flashcard.ITEM
+            then
+                local signals = holder.receiver.get_merged_signals();
+                flashcard.save_data(inventory[1], signals)
+            end
+            if holder.animation == nil then
+                holder.animation = rendering.draw_animation({
+                    animation = names.writer.READY_ANIMATION,
+                    target = holder.writer,
+                    surface = holder.writer.surface
+                })
+                holder.writer.active = false
+            end
+        elseif holder.animation ~= nil then
+            rendering.destroy(holder.animation)
+            holder.animation = nil
+            holder.writer.active = true
         end
     end
 end
