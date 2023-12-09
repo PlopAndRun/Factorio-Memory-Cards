@@ -62,6 +62,10 @@ return {
         icon = graphics('writer-item.png'),
         icon_size = 64
     },
+    reader_item = {
+        icon = graphics('reader-item.png'),
+        icon_size = 64
+    },
     flash_card_item = {
         icon = graphics('flash-card-item.png'),
         icon_size = 64

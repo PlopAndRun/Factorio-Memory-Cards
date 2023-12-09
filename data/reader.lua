@@ -4,6 +4,7 @@ local graphics = require 'graphics.definitions'
 local inventory = {
     type = 'container',
     name = names.reader.CONTAINER,
+    localised_name = 'Flash card reader',
     inventory_size = 1,
     picture = graphics.transparent,
     enable_inventory_bar = false,
@@ -11,21 +12,11 @@ local inventory = {
     selection_box = { { 0.5, 0.5 }, { 0.5, 0.5 } },
 }
 
-local connection_point = {
-    wire = {
-        red = { 0, 1 },
-        green = { 0.1, 1 }
-    },
-    shadow = {
-        red = { 0, 1 },
-        green = { 0.1, 1 }
-    }
-}
-
 local signal_sender = table.deepcopy(data.raw['constant-combinator']['constant-combinator'])
 
 signal_sender.type = 'constant-combinator'
 signal_sender.name = names.reader.SIGNAL_SENDER
+signal_sender.localised_name = inventory.localised_name
 signal_sender.sprites = graphics.reader_entity.idle
 signal_sender.activity_led_sprites = graphics.reader_entity.active
 signal_sender.activity_led_light_offsets = { { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } }
@@ -38,8 +29,7 @@ local item = {
     name = names.reader.ITEM,
     localised_name = inventory.localised_name,
     stack_size = 50,
-    icon = '__base__/graphics/icons/constant-combinator.png',
-    icon_size = 64,
+    icons = { graphics.reader_item },
     place_result = signal_sender.name,
     subgroup = 'circuit-network',
 }
