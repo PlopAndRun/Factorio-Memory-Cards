@@ -10,4 +10,13 @@ function _M.spill_items(surface, position, force, inventory)
     end
 end
 
+function _M.fast_insert(player, entity)
+    if not player.cursor_stack then return end
+    if not entity then return end
+    if entity.insert(player.cursor_stack) > 0 then
+        player.play_sound({ path = 'utility/inventory_move' })
+        player.cursor_stack.clear()
+    end
+end
+
 return _M

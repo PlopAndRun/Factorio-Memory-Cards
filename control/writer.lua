@@ -4,6 +4,10 @@ local flashcard = require 'control.flashcard'
 local utils = require 'utils'
 local _M = {}
 
+local function find_writer(entity) 
+    return entity.surface.find_entity(names.writer.BUILDING, entity.position)
+end
+
 function _M.on_built(entity)
     local surface = entity.surface
     local position = entity.position
@@ -30,7 +34,7 @@ end
 
 function _M.on_destroyed(entity, player_index)
     local surface = entity.surface
-    local writer = surface.find_entity(names.writer.BUILDING, entity.position)
+    local writer = find_writer(entity)
     local holder = persistence.writers()[writer.unit_number]
     if holder then
         persistence.delete_writer(holder)
@@ -54,8 +58,8 @@ function _M.on_destroyed(entity, player_index)
 end
 
 function _M.on_gui_opened(entity, player_index)
-    local writer = entity.surface.find_entity(names.writer.BUILDING, entity.position)
-    if entity then
+    local writer = find_writer(entity)
+    if writer then
         game.get_player(player_index).opened = writer
     end
 end
@@ -71,6 +75,10 @@ function _M.on_tick()
             flashcard.save_data(inventory[1], signals)
         end
     end
+end
+
+function _M.on_player_fast_inserted(entity, player)
+    utils.fast_insert(player, find_writer(entity))
 end
 
 return _M

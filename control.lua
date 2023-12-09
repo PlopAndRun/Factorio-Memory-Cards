@@ -36,6 +36,17 @@ local function on_gui_opened(event)
     end
 end
 
+local function on_player_fast_transferred(event)
+    local entity = event.entity
+    if not entity then return end
+    if not event.from_player then return end -- an attempt to transfer from a lamp does not trigger an event
+    if entity.name == names.reader.SIGNAL_SENDER then
+        reader.on_player_fast_inserted(entity, game.get_player(event.player_index))
+    elseif entity.name == names.writer.SIGNAL_RECEIVER then
+        writer.on_player_fast_inserted(entity, game.get_player(event.player_index))
+    end
+end
+
 script.on_event(defines.events.on_built_entity, on_built)
 script.on_event(defines.events.on_robot_built_entity, on_built)
 
@@ -47,3 +58,4 @@ script.on_event(defines.events.script_raised_destroy, on_destroyed)
 script.on_event(defines.events.on_tick, on_tick)
 
 script.on_event(defines.events.on_gui_opened, on_gui_opened)
+script.on_event(defines.events.on_player_fast_transferred, on_player_fast_transferred)

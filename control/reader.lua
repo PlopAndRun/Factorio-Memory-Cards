@@ -5,6 +5,10 @@ local utils = require 'utils'
 
 local _M = {}
 
+local function find_chest(entity)
+    return entity.surface.find_entity(names.reader.CONTAINER, entity.position)
+end
+
 function _M.on_built(sender)
     local control_behavior = sender.get_or_create_control_behavior()
     control_behavior.parameters = {}
@@ -52,10 +56,14 @@ function _M.on_tick()
 end
 
 function _M.on_gui_opened(entity, player_index)
-    local chest = entity.surface.find_entity(names.reader.CONTAINER, entity.position)
+    local chest = find_chest(entity)
     if chest then
         game.get_player(player_index).opened = chest
     end
+end
+
+function _M.on_player_fast_inserted(entity, player)
+    utils.fast_insert(player, find_chest(entity))
 end
 
 return _M
