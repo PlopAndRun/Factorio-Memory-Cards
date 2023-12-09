@@ -36,15 +36,6 @@ local function on_gui_opened(event)
     end
 end
 
-local function on_gui_closed(event)
-    if event.element
-        and event.element.valid
-        and event.element.name == names.gui.flashcard.ROOT
-    then
-        flashcard.close_gui()
-    end
-end
-
 script.on_event(defines.events.on_built_entity, on_built)
 script.on_event(defines.events.on_robot_built_entity, on_built)
 
@@ -56,5 +47,3 @@ script.on_event(defines.events.script_raised_destroy, on_destroyed)
 script.on_event(defines.events.on_tick, on_tick)
 
 script.on_event(defines.events.on_gui_opened, on_gui_opened)
-script.on_event(defines.events.on_gui_click, on_gui_click)
-script.on_event(defines.events.on_gui_closed, on_gui_closed)
