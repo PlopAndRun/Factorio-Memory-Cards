@@ -80,8 +80,8 @@ local recipe = {
 }
 
 local connection_point = {
-    red = { 0, 1 },
-    green = { 0.1, 1 }
+    red = { 0.08, 0.8 },
+    green = { -0.12, 0.8 }
 }
 
 local signal_receiver = {
