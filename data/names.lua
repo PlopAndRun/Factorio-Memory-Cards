@@ -20,5 +20,6 @@ _M.reader.CONTAINER = _M.MOD_PREFIX .. 'reader'
 _M.reader.ITEM = _M.reader.CONTAINER
 _M.reader.RECIPE = _M.reader.CONTAINER
 _M.reader.SIGNAL_SENDER = _M.MOD_PREFIX .. 'reader-signal-sender'
+_M.reader.SIGNAL_SENDER_CELL = _M.MOD_PREFIX .. 'reader-signal-sender-cell'
 
 return _M;

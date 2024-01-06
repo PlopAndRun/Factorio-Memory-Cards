@@ -1,4 +1,5 @@
 local names = require 'data.names'
+local constants = require 'data.constants'
 local graphics = require 'graphics.definitions'
 
 local inventory = {
@@ -8,14 +9,18 @@ local inventory = {
     inventory_size = 1,
     picture = graphics.transparent,
     enable_inventory_bar = false,
-    flags = { 'placeable-off-grid' },
+    flags = constants.HIDDEN_ENTITY_FLAGS,
+    destructible = false,
     selection_box = { { 0.5, 0.5 }, { 0.5, 0.5 } },
 }
 
 local signal_sender = table.deepcopy(data.raw['constant-combinator']['constant-combinator'])
 
 signal_sender.type = 'constant-combinator'
+signal_sender.item_slot_count = 0
 signal_sender.name = names.reader.SIGNAL_SENDER
+signal_sender.flags = { 'player-creation' }
+signal_sender.is_military_target = false
 signal_sender.localised_name = inventory.localised_name
 signal_sender.sprites = graphics.reader_entity.idle
 signal_sender.activity_led_sprites = graphics.reader_entity.active
@@ -23,6 +28,16 @@ signal_sender.activity_led_light_offsets = { { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 
 signal_sender.selection_priority = 40
 signal_sender.items_to_place_this = { names.reader.ITEM }
 signal_sender.minable = { mining_time = 1, result = names.reader.ITEM }
+
+local combinator_cell = table.deepcopy(data.raw['constant-combinator']['constant-combinator'])
+combinator_cell.name = names.reader.SIGNAL_SENDER_CELL
+combinator_cell.item_slot_count = constants.READER_SLOTS
+combinator_cell.flags = constants.HIDDEN_ENTITY_FLAGS
+combinator_cell.sprites = nil
+combinator_cell.activity_led_sprites = nil
+combinator_cell.draw_circuit_wires = false
+combinator_cell.selectable_in_game = false
+combinator_cell.destructible = false
 
 local item = {
     type = 'item',
@@ -49,6 +64,6 @@ local recipe = {
 
 return {
     register = function()
-        data:extend({ item, recipe, inventory, signal_sender })
+        data:extend({ item, recipe, inventory, signal_sender, combinator_cell })
     end
 }

@@ -1,4 +1,5 @@
 local names = require 'data.names'
+local constants = require 'data.constants'
 local graphics = require 'graphics.definitions'
 
 local writing_recipe_category = {
@@ -26,7 +27,7 @@ local building = {
     type = 'furnace',
     name = names.writer.BUILDING,
     localised_name = 'Flash card writer',
-    flags = { 'placeable-off-grid' },
+    flags = constants.HIDDEN_ENTITY_FLAGS,
     energy_usage = '50W',
     crafting_speed = 1.0,
     crafting_categories = { writing_recipe_category.name },
@@ -87,6 +88,7 @@ local connection_point = {
 local signal_receiver = {
     type = 'lamp',
     flags = { 'player-creation' },
+    is_military_target = false,
     name = names.writer.SIGNAL_RECEIVER,
     localised_name = building.localised_name,
     localised_description = building.localised_description,

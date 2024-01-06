@@ -24,7 +24,7 @@ end
 function _M.register_reader(sender, reader)
     local holder = {
         sender = sender,
-        reader = reader
+        reader = reader,
     }
     if not global.readers then global.readers = {} end
     global.readers[reader.unit_number] = holder
