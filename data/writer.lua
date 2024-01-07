@@ -8,6 +8,16 @@ local writing_recipe_category = {
     name = names.writer.RECIPE_CATEGORY
 }
 
+local freshly_written_flashcard = {
+    type = 'item',
+    name = names.flashcard.WRITE_RESULT_ITEM,
+    icons = { graphics.flash_card_item },
+    localised_name = 'asdf',
+    subgroup = 'circuit-network',
+    stack_size = 1,
+    flags = { 'not-stackable' },
+}
+
 local writing_recipe = {
     type = 'recipe',
     category = writing_recipe_category.name,
@@ -15,10 +25,10 @@ local writing_recipe = {
     ingredients = {
         { names.flashcard.ITEM, 1 }
     },
-    result = names.flashcard.ITEM,
+    result = names.flashcard.WRITE_RESULT_ITEM,
     energy_required = 1,
-    hidden = true,
-    hide_from_stats = true,
+    hidden = false,
+    hide_from_stats = false,
     hide_from_player_crafting = true,
     allow_as_intermediate = false,
     allow_intermediates = false,
@@ -123,6 +133,7 @@ return {
         data:extend({
             writing_recipe_category,
             item,
+            freshly_written_flashcard,
             building,
             recipe,
             writing_recipe,

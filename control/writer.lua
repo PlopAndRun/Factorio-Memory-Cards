@@ -68,9 +68,11 @@ function _M.on_tick()
     for _, holder in pairs(persistence.writers()) do
         local inventory = holder.writer.get_output_inventory()
         if not inventory.is_empty() then
-            if not flashcard.is_initialized(inventory[1]) and inventory[1].name == names.flashcard.ITEM
+            if inventory[1].name == names.flashcard.WRITE_RESULT_ITEM
             then
                 local signals = holder.receiver.get_merged_signals();
+                inventory.clear()
+                inventory.insert { name = names.flashcard.ITEM, count = 1 }
                 flashcard.save_data(inventory[1], signals)
             end
             if holder.animation == nil then

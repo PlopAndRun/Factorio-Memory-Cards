@@ -9,7 +9,7 @@ local item = {
     subgroup = 'circuit-network',
     stack_size = 1,
     localised_name = 'Flash card',
-    flags = { 'not-stackable' }
+    flags = { 'not-stackable' },
 }
 
 local recipe = {

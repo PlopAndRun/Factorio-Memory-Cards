@@ -46,6 +46,7 @@ _M.names.MOD_PREFIX = 'flashcards-'
 
 _M.names.flashcard = {}
 _M.names.flashcard.ITEM = _M.names.MOD_PREFIX .. 'flashcard'
+_M.names.flashcard.WRITE_RESULT_ITEM = _M.names.MOD_PREFIX .. 'flashcard-written'
 _M.names.flashcard.RECIPE = _M.names.flashcard.ITEM
 
 _M.names.writer = {}

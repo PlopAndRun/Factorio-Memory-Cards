@@ -2,11 +2,10 @@ local names = (require 'utils').names
 
 local _M = {}
 
-local INIT_FLAG = names.MOD_PREFIX .. 'initialized'
 local SIGNALS = names.MOD_PREFIX .. 'signals'
 
 local function build_description(signals)
-    local builder = { "Initialized" }
+    local builder = {}
     if signals ~= nil then
         for _, signal in pairs(signals) do
             local name = signal.signal.name
@@ -30,16 +29,9 @@ local function convert_signals(signals)
     return result
 end
 
-function _M.is_initialized(flashcard)
-    return flashcard.get_tag(INIT_FLAG) == true
-end
-
 function _M.save_data(flashcard, signals)
-    if flashcard.get_tag(INIT_FLAG) ~= true then
-        flashcard.set_tag(INIT_FLAG, true)
-        flashcard.set_tag(SIGNALS, convert_signals(signals))
-        flashcard.custom_description = build_description(signals)
-    end
+    flashcard.set_tag(SIGNALS, convert_signals(signals))
+    flashcard.custom_description = build_description(signals)
 end
 
 function _M.read_data(flashcard)
