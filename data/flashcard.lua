@@ -8,13 +8,15 @@ local item = {
     icons = { graphics.flash_card_item },
     subgroup = 'circuit-network',
     stack_size = 1,
-    localised_name = 'Flash card',
+    localised_name = { 'item-name.flashcard' },
+    localised_description = { 'description.flashcard-empty' },
     flags = { 'not-stackable' },
 }
 
 local recipe = {
     type = 'recipe',
     name = names.flashcard.RECIPE,
+    localised_description = { 'description.flashcard' },
     result = item.name,
     ingredients = {
         { 'electronic-circuit', 1 },

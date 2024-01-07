@@ -5,15 +5,33 @@ local _M = {}
 local SIGNALS = names.MOD_PREFIX .. 'signals'
 
 local function build_description(signals)
-    local builder = {}
+    if not signals then
+        return { 'description.flashcard-empty' }
+    end
+    local builder = { '' }
+    table.sort(signals, function(signal1, signal2) return signal2.count < signal1.count end)
+    local limit = #signals <= 19 and 20 or 19
     if signals ~= nil then
         for _, signal in pairs(signals) do
             local name = signal.signal.name
-            local count = tostring(signal.count)
-            table.insert(builder, name .. ": " .. count)
+            local count = signal.count
+            local newline = #builder > 1 and '\n' or ''
+            local localization = { '?',
+                { 'item-name.' .. name },
+                { 'entity-name.' .. name },
+                { 'virtual-signal-name.' .. name },
+                name
+            }
+            table.insert(builder, { '', newline, localization, ': ', count })
+            if #builder >= limit then
+                break
+            end
         end
     end
-    return table.concat(builder, '\n')
+    if #signals >= 20 then
+        table.insert(builder, { '', '\n', { 'flashcards.has-more-signals', #signals - 18 } });
+    end
+    return builder
 end
 
 local function convert_signals(signals)
