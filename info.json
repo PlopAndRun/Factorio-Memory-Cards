@@ -1,9 +1,9 @@
 {
-    "name": "flash-cards",
+    "name": "memory-cards",
     "version": "0.1.0",
-    "title": "Flash cards",
+    "title": "Memory cards",
     "author": "Plop and Run",
     "factorio_version": "1.1",
     "dependencies": ["base >= 1.1"],
-    "description": "This mod adds flash cards that you can store network signals"
+    "description": "This mod adds memory cards to store network signals"
 }

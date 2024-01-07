@@ -6,7 +6,7 @@ local SIGNALS = names.MOD_PREFIX .. 'signals'
 
 local function build_description(signals)
     if not signals then
-        return { 'description.flashcard-empty' }
+        return { 'description.memorycard-empty' }
     end
     local builder = { '' }
     table.sort(signals, function(signal1, signal2) return signal2.count < signal1.count end)
@@ -29,7 +29,7 @@ local function build_description(signals)
         end
     end
     if #signals >= 20 then
-        table.insert(builder, { '', '\n', { 'flashcards.has-more-signals', #signals - 18 } });
+        table.insert(builder, { '', '\n', { 'memorycard.has-more-signals', #signals - 18 } });
     end
     return builder
 end
@@ -47,13 +47,13 @@ local function convert_signals(signals)
     return result
 end
 
-function _M.save_data(flashcard, signals)
-    flashcard.set_tag(SIGNALS, convert_signals(signals))
-    flashcard.custom_description = build_description(signals)
+function _M.save_data(memorycard, signals)
+    memorycard.set_tag(SIGNALS, convert_signals(signals))
+    memorycard.custom_description = build_description(signals)
 end
 
-function _M.read_data(flashcard)
-    return flashcard.get_tag(SIGNALS) or {}
+function _M.read_data(memorycard)
+    return memorycard.get_tag(SIGNALS) or {}
 end
 
 return _M

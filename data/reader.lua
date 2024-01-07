@@ -6,8 +6,8 @@ local constants = utils.constants
 local inventory = {
     type = 'container',
     name = names.reader.CONTAINER,
-    localised_name = { 'item-name.flashcard-reader' },
-    localised_description = { 'description.flashcard-reader' },
+    localised_name = { 'item-name.memorycard-reader' },
+    localised_description = { 'description.memorycard-reader' },
     inventory_size = 1,
     picture = graphics.transparent,
     enable_inventory_bar = false,
@@ -65,7 +65,7 @@ local recipe = {
     result = item.name,
     energy_required = 1,
     enabled = false,
-    order = 'c[combinators]-f[flashcard-reader]',
+    order = 'c[combinators]-m[memorycard-reader]',
 }
 
 return {

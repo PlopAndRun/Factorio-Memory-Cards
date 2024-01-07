@@ -1,5 +1,5 @@
 local function graphics(filename)
-    return '__flash-cards__/graphics/' .. filename
+    return '__memory-cards__/graphics/' .. filename
 end
 
 return {
@@ -77,8 +77,8 @@ return {
         icon = graphics('reader-item.png'),
         icon_size = 64
     },
-    flash_card_item = {
-        icon = graphics('flash-card-item.png'),
+    memorycard_item = {
+        icon = graphics('memorycard-item.png'),
         icon_size = 64
     }
 }

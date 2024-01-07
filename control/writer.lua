@@ -1,5 +1,5 @@
 local persistence = require 'persistence'
-local flashcard = require 'control.flashcard'
+local memorycard = require 'control.memorycard'
 local utils = require 'utils'
 local _M = {}
 local names = utils.names
@@ -48,7 +48,7 @@ function _M.on_destroyed(entity, player_index)
                 holder.writer.get_inventory(defines.inventory.furnace_result))
             if holder.writer.is_crafting() then
                 local temp_inventory = game.create_inventory(1)
-                temp_inventory.insert { name = names.flashcard.ITEM, count = 1 }
+                temp_inventory.insert { name = names.memorycard.ITEM, count = 1 }
                 utils.spill_items(surface, entity.position, entity.force, temp_inventory)
                 temp_inventory.destroy()
             end
@@ -68,12 +68,12 @@ function _M.on_tick()
     for _, holder in pairs(persistence.writers()) do
         local inventory = holder.writer.get_output_inventory()
         if not inventory.is_empty() then
-            if inventory[1].name == names.flashcard.WRITE_RESULT_ITEM
+            if inventory[1].name == names.memorycard.WRITE_RESULT_ITEM
             then
                 local signals = holder.receiver.get_merged_signals();
                 inventory.clear()
-                inventory.insert { name = names.flashcard.ITEM, count = 1 }
-                flashcard.save_data(inventory[1], signals)
+                inventory.insert { name = names.memorycard.ITEM, count = 1 }
+                memorycard.save_data(inventory[1], signals)
             end
             if holder.animation == nil then
                 holder.animation = rendering.draw_animation({

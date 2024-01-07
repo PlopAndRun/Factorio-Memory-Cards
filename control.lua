@@ -1,7 +1,6 @@
 local names = require('utils').names
 local writer = require 'control.writer'
 local reader = require 'control.reader'
-local flashcard = require 'control.flashcard'
 
 local function on_built(event)
     local entity = event.created_entity or event.entity

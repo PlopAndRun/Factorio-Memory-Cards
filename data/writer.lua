@@ -8,10 +8,10 @@ local writing_recipe_category = {
     name = names.writer.RECIPE_CATEGORY
 }
 
-local freshly_written_flashcard = {
+local freshly_written_memorycard = {
     type = 'item',
-    name = names.flashcard.WRITE_RESULT_ITEM,
-    icons = { graphics.flash_card_item },
+    name = names.memorycard.WRITE_RESULT_ITEM,
+    icons = { graphics.memorycard_item },
     subgroup = 'circuit-network',
     stack_size = 1,
     flags = { 'not-stackable' },
@@ -22,9 +22,9 @@ local writing_recipe = {
     category = writing_recipe_category.name,
     name = names.writer.WRITE_RECIPE,
     ingredients = {
-        { names.flashcard.ITEM, 1 }
+        { names.memorycard.ITEM, 1 }
     },
-    result = names.flashcard.WRITE_RESULT_ITEM,
+    result = names.memorycard.WRITE_RESULT_ITEM,
     energy_required = 1,
     hidden = false,
     hide_from_stats = false,
@@ -36,8 +36,8 @@ local writing_recipe = {
 local building = {
     type = 'furnace',
     name = names.writer.BUILDING,
-    localised_name = { 'item-name.flashcard-writer' },
-    localised_description = { 'description.flashcard-writer' },
+    localised_name = { 'item-name.memorycard-writer' },
+    localised_description = { 'description.memorycard-writer' },
     flags = constants.HIDDEN_ENTITY_FLAGS,
     energy_usage = '50W',
     crafting_speed = 1.0,
@@ -91,7 +91,7 @@ local recipe = {
     result = item.name,
     energy_required = 1,
     enabled = false,
-    order = 'c[combinators]-f[flashcard-writer]',
+    order = 'c[combinators]-m[memorycard-writer]',
 }
 
 local connection_point = {
@@ -134,7 +134,7 @@ return {
         data:extend({
             writing_recipe_category,
             item,
-            freshly_written_flashcard,
+            freshly_written_memorycard,
             building,
             recipe,
             writing_recipe,

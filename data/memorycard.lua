@@ -4,26 +4,26 @@ local names = utils.names
 
 local item = {
     type = 'item-with-tags',
-    name = names.flashcard.ITEM,
-    icons = { graphics.flash_card_item },
+    name = names.memorycard.ITEM,
+    icons = { graphics.memorycard_item },
     subgroup = 'circuit-network',
     stack_size = 1,
-    localised_name = { 'item-name.flashcard' },
-    localised_description = { 'description.flashcard-empty' },
+    localised_name = { 'item-name.memorycard' },
+    localised_description = { 'description.memorycard-empty' },
     flags = { 'not-stackable' },
 }
 
 local recipe = {
     type = 'recipe',
-    name = names.flashcard.RECIPE,
-    localised_description = { 'description.flashcard' },
+    name = names.memorycard.RECIPE,
+    localised_description = { 'description.memorycard' },
     result = item.name,
     ingredients = {
         { 'electronic-circuit', 1 },
         { 'plastic-bar',        1 },
     },
     enabled = false,
-    order = 'c[combinators]-f[flashcard]',
+    order = 'c[combinators]-m[memorycard]',
 }
 
 return {

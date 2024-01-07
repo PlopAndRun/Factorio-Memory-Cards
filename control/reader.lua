@@ -1,5 +1,5 @@
 local persistence = require 'persistence'
-local flashcard = require 'control.flashcard'
+local memorycard = require 'control.memorycard'
 local utils = require 'utils'
 local names = utils.names
 local constants = utils.constants
@@ -11,7 +11,7 @@ end
 
 local function create_cells(holder, card)
     local surface = holder.reader.surface
-    local data = flashcard.read_data(card)
+    local data = memorycard.read_data(card)
     local cells = {}
     local cell = nil
     local cell_control_behavior = nil
@@ -93,7 +93,7 @@ function _M.on_tick()
     for _, holder in pairs(persistence.readers()) do
         local inventory = holder.reader.get_inventory(defines.inventory.chest)
         if not inventory.is_empty()
-            and inventory[1].name == names.flashcard.ITEM
+            and inventory[1].name == names.memorycard.ITEM
         then
             if holder.cells == nil then
                 create_cells(holder, inventory[1])

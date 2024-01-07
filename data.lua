@@ -1,3 +1,3 @@
-require('data.flashcard').register()
+require('data.memorycard').register()
 require('data.writer').register()
 require('data.reader').register()

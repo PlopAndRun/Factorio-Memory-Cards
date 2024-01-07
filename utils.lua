@@ -42,12 +42,12 @@ _M.constants = {
 }
 
 _M.names = {}
-_M.names.MOD_PREFIX = 'flashcards-'
+_M.names.MOD_PREFIX = 'memorycards-'
 
-_M.names.flashcard = {}
-_M.names.flashcard.ITEM = _M.names.MOD_PREFIX .. 'flashcard'
-_M.names.flashcard.WRITE_RESULT_ITEM = _M.names.MOD_PREFIX .. 'flashcard-written'
-_M.names.flashcard.RECIPE = _M.names.flashcard.ITEM
+_M.names.memorycard = {}
+_M.names.memorycard.ITEM = _M.names.MOD_PREFIX .. 'memorycard'
+_M.names.memorycard.WRITE_RESULT_ITEM = _M.names.MOD_PREFIX .. 'memorycard-written'
+_M.names.memorycard.RECIPE = _M.names.memorycard.ITEM
 
 _M.names.writer = {}
 _M.names.writer.WRITE_RECIPE = _M.names.MOD_PREFIX .. 'write-recipe'
