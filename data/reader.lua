@@ -1,6 +1,7 @@
-local names = require 'data.names'
-local constants = require 'data.constants'
+local utils = require 'utils'
 local graphics = require 'graphics.definitions'
+local names = utils.names
+local constants = utils.constants
 
 local inventory = {
     type = 'container',
@@ -59,11 +60,14 @@ local recipe = {
         { 'arithmetic-combinator', 1 }
     },
     result = item.name,
-    energy_required = 1
+    energy_required = 1,
+    enabled = false,
+    order = 'c[combinators]-f[flashcard-reader]',
 }
 
 return {
     register = function()
         data:extend({ item, recipe, inventory, signal_sender, combinator_cell })
+        utils.add_recipe_to_unlocks(recipe)
     end
 }

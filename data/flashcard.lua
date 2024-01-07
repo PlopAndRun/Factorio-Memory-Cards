@@ -1,5 +1,6 @@
-local names = require 'data.names'
+local utils = require 'utils'
 local graphics = require 'graphics.definitions'
+local names = utils.names
 
 local item = {
     type = 'item-with-tags',
@@ -16,12 +17,16 @@ local recipe = {
     name = names.flashcard.RECIPE,
     result = item.name,
     ingredients = {
-        { 'electronic-circuit', 1 }
-    }
+        { 'electronic-circuit', 1 },
+        { 'plastic-bar',        1 },
+    },
+    enabled = false,
+    order = 'c[combinators]-f[flashcard]',
 }
 
 return {
     register = function()
         data:extend({ item, recipe })
+        utils.add_recipe_to_unlocks(recipe)
     end
 }

@@ -1,9 +1,8 @@
-local names = require 'data.names'
-local constants = require 'data.constants'
 local persistence = require 'persistence'
 local flashcard = require 'control.flashcard'
 local utils = require 'utils'
-
+local names = utils.names
+local constants = utils.constants
 local _M = {}
 
 local function find_chest(entity)

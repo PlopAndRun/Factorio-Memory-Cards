@@ -1,8 +1,8 @@
-local names = require 'data.names'
 local persistence = require 'persistence'
 local flashcard = require 'control.flashcard'
 local utils = require 'utils'
 local _M = {}
+local names = utils.names
 
 local function find_writer(entity)
     return entity.surface.find_entity(names.writer.BUILDING, entity.position)

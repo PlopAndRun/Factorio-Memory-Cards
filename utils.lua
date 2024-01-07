@@ -19,4 +19,49 @@ function _M.fast_insert(player, entity)
     end
 end
 
+function _M.add_recipe_to_unlocks(recipe)
+    table.insert(data.raw["technology"]["circuit-network"].effects, {
+        type = 'unlock-recipe',
+        recipe = recipe.name,
+    })
+end
+
+_M.constants = {
+    READER_SLOTS = 20,
+    HIDDEN_ENTITY_FLAGS = { 'placeable-off-grid',
+        'not-on-map',
+        'not-deconstructable',
+        'not-blueprintable',
+        'hidden',
+        'hide-alt-info',
+        'not-flammable',
+        'no-copy-paste',
+        'not-selectable-in-game',
+        'not-in-kill-statistics',
+    },
+}
+
+_M.names = {}
+_M.names.MOD_PREFIX = 'flashcards-'
+
+_M.names.flashcard = {}
+_M.names.flashcard.ITEM = _M.names.MOD_PREFIX .. 'flashcard'
+_M.names.flashcard.RECIPE = _M.names.flashcard.ITEM
+
+_M.names.writer = {}
+_M.names.writer.WRITE_RECIPE = _M.names.MOD_PREFIX .. 'write-recipe'
+_M.names.writer.BUILDING = _M.names.MOD_PREFIX .. 'writer'
+_M.names.writer.ITEM = _M.names.writer.BUILDING
+_M.names.writer.RECIPE = _M.names.writer.ITEM
+_M.names.writer.RECIPE_CATEGORY = _M.names.MOD_PREFIX .. 'write-recipe-category'
+_M.names.writer.SIGNAL_RECEIVER = _M.names.MOD_PREFIX .. 'writer-signal-receiver'
+_M.names.writer.READY_ANIMATION = _M.names.MOD_PREFIX .. 'writer-ready-animation'
+
+_M.names.reader = {}
+_M.names.reader.CONTAINER = _M.names.MOD_PREFIX .. 'reader'
+_M.names.reader.ITEM = _M.names.reader.CONTAINER
+_M.names.reader.RECIPE = _M.names.reader.CONTAINER
+_M.names.reader.SIGNAL_SENDER = _M.names.MOD_PREFIX .. 'reader-signal-sender'
+_M.names.reader.SIGNAL_SENDER_CELL = _M.names.MOD_PREFIX .. 'reader-signal-sender-cell'
+
 return _M

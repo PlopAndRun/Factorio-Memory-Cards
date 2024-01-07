@@ -1,6 +1,7 @@
-local names = require 'data.names'
-local constants = require 'data.constants'
+local utils = require 'utils'
 local graphics = require 'graphics.definitions'
+local names = utils.names
+local constants = utils.constants
 
 local writing_recipe_category = {
     type = 'recipe-category',
@@ -73,11 +74,13 @@ local recipe = {
     icon = item.icon,
     icon_size = item.icon_size,
     ingredients = {
-        { 'constant-combinator',  1 },
-        { 'assembling-machine-1', 1 }
+        { 'constant-combinator', 1 },
+        { 'electronic-circuit',  2 }
     },
     result = item.name,
-    energy_required = 1
+    energy_required = 1,
+    enabled = false,
+    order = 'c[combinators]-f[flashcard-writer]',
 }
 
 local connection_point = {
@@ -126,5 +129,6 @@ return {
             signal_receiver,
             animation,
         });
+        utils.add_recipe_to_unlocks(recipe)
     end
 }

@@ -1,4 +1,4 @@
-local names = require 'data.names'
+local names = (require 'utils').names
 
 local _M = {}
 
