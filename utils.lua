@@ -65,4 +65,7 @@ _M.names.reader.RECIPE = _M.names.reader.CONTAINER
 _M.names.reader.SIGNAL_SENDER = _M.names.MOD_PREFIX .. 'reader-signal-sender'
 _M.names.reader.SIGNAL_SENDER_CELL = _M.names.MOD_PREFIX .. 'reader-signal-sender-cell'
 
+_M.names.signal = {}
+_M.names.signal.INSERTED = _M.names.MOD_PREFIX .. 'signal-inserted'
+
 return _M

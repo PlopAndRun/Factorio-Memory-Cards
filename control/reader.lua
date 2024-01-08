@@ -98,7 +98,7 @@ function _M.on_tick()
             if holder.cells == nil then
                 create_cells(holder, inventory[1])
                 local cb = holder.sender.get_or_create_control_behavior()
-                cb.set_signal(1, { signal = { type = 'virtual', name = 'signal-dot' }, count = 1 })
+                cb.set_signal(1, { signal = { type = 'virtual', name = names.signal.INSERTED }, count = 1 })
             end
         else
             if holder.cells ~= nil then

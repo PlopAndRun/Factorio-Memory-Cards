@@ -29,7 +29,7 @@ local function build_description(signals)
         end
     end
     if #signals >= 20 then
-        table.insert(builder, { '', '\n', { 'memorycard.has-more-signals', #signals - 18 } });
+        table.insert(builder, { '', '\n', { 'memorycards.has-more-signals', #signals - 18 } });
     end
     return builder
 end
