@@ -10,6 +10,25 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       
     steps:
-      - uses: actions/checkout@v4
-      - name: checkout master
-        run: git checkout master
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: prepare
+        id: prepare
+        shell: pwsh
+        run: |
+          $json = Get-Content .\info.json | ConvertFrom-Json
+          $version = $json.version
+          $archive = "memory-cards_$version.zip"
+          echo "$GITHUB_ENV"
+          echo "archive=$archive" >> "$env:GITHUB_ENV"
+          echo "version=$version" >> "$env:GITHUB_ENV"
+                  
+      - name: Create archive
+        shell: pwsh
+        run: |
+          $items = Get-ChildItem . -Exclude @(".gitignore", ".git", ".vscode", "Publish", "publish.ps1")
+          Compress-Archive -Path $items -CompressionLevel Optimal -DestinationPath "$env:archive"
+
+      - name: Release
+        run: gh release create "v$env:version" "$env:archive" --notes "v$env:version" --draft

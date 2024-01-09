@@ -18,6 +18,3 @@ $items = Get-ChildItem . -Exclude @(".gitignore", ".git", ".vscode", "Publish", 
 
 Write-Output "Creating archive $out_archive"
 Compress-Archive -Path $items -CompressionLevel Optimal -DestinationPath $out_archive
-
-Write-Output "Publishing archive"
-gh release create "v$version" "$out_archive" --notes "v$version"
