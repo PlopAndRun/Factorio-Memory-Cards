@@ -14,7 +14,7 @@ if (Test-Path $out_archive) {
     Remove-Item -Force $out_archive
 }
 
-$items = Get-ChildItem . -Exclude @(".gitignore", ".git", ".vscode", "Publish", "publish.ps1")
+$items = Get-ChildItem . -Exclude @(".gitignore", ".git", ".vscode", ".github", "Publish", "publish.ps1")
 
 Write-Output "Creating archive $out_archive"
 Compress-Archive -Path $items -CompressionLevel Optimal -DestinationPath $out_archive
