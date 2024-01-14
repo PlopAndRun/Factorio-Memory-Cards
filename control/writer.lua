@@ -39,7 +39,6 @@ function _M.on_destroyed(entity, player_index)
     if holder then
         persistence.delete_writer(holder)
         if player_index ~= nil then
-            -- TODO: overflow
             game.players[player_index].mine_entity(holder.writer, true)
         else
             utils.spill_items(surface, entity.position, entity.force,

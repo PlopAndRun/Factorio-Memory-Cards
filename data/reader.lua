@@ -9,12 +9,12 @@ local inventory = {
     localised_name = { 'item-name.memorycard-reader' },
     localised_description = { 'description.memorycard-reader' },
     inventory_size = 1,
-    picture = graphics.transparent,
+    picture = graphics.reader_entity.idle,
     enable_inventory_bar = false,
-    flags = { 'player-creation' },
+    flags = constants.HIDDEN_ENTITY_FLAGS,
     destructible = false,
     selection_box = { { 0.5, 0.5 }, { 0.5, 0.5 } },
-    items_to_place_this = { names.reader.ITEM },
+    minable = { mining_time = 0.5 },
 }
 
 local signal_sender = table.deepcopy(data.raw['constant-combinator']['constant-combinator'])
@@ -22,7 +22,7 @@ local signal_sender = table.deepcopy(data.raw['constant-combinator']['constant-c
 signal_sender.type = 'constant-combinator'
 signal_sender.item_slot_count = 1
 signal_sender.name = names.reader.SIGNAL_SENDER
-signal_sender.flags = constants.HIDDEN_ENTITY_FLAGS
+signal_sender.flags = { 'player-creation' }
 signal_sender.is_military_target = false
 signal_sender.localised_name = inventory.localised_name
 signal_sender.localised_description = inventory.localised_description
@@ -30,6 +30,7 @@ signal_sender.sprites = graphics.reader_entity.idle
 signal_sender.activity_led_sprites = graphics.reader_entity.active
 signal_sender.activity_led_light_offsets = { { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } }
 signal_sender.selection_priority = 40
+signal_sender.items_to_place_this = { names.reader.ITEM }
 signal_sender.minable = { mining_time = 1, result = names.reader.ITEM }
 
 local combinator_cell = table.deepcopy(data.raw['constant-combinator']['constant-combinator'])
@@ -49,7 +50,7 @@ local item = {
     localised_description = inventory.localised_description,
     stack_size = 50,
     icons = { graphics.reader_item },
-    place_result = inventory.name,
+    place_result = signal_sender.name,
     subgroup = 'circuit-network',
 }
 
