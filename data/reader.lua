@@ -15,6 +15,7 @@ local inventory = {
     destructible = false,
     selection_box = { { 0.5, 0.5 }, { 0.5, 0.5 } },
     minable = { mining_time = 0.5 },
+    inventory_type = "with_filters_and_bar",
 }
 
 local signal_sender = table.deepcopy(data.raw['constant-combinator']['constant-combinator'])

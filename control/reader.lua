@@ -68,6 +68,8 @@ function _M.on_built(sender)
         force = sender.force,
         create_build_effect_smoke = false
     }
+    local inventory = reader.get_inventory(defines.inventory.chest)
+    inventory.set_filter(1, names.memorycard.ITEM)
     persistence.register_reader(sender, reader)
 end
 
