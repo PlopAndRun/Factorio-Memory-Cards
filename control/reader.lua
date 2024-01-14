@@ -123,4 +123,13 @@ function _M.on_player_fast_inserted(entity, player)
     utils.fast_insert(player, find_chest(entity))
 end
 
+function _M.on_surface_erased(surface_index) 
+    local readers = persistence.readers()
+    for key, holder in pairs(readers) do
+        if holder.reader.surface_index == surface_index then
+            readers[key] = nil
+        end
+    end
+end
+
 return _M

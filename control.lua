@@ -20,6 +20,11 @@ local function on_destroyed(event)
     end
 end
 
+local function on_surface_erased(event) 
+    writer.on_surface_erased(event.surface_index)
+    reader.on_surface_erased(event.surface_index)
+end
+
 local function on_tick()
     writer.on_tick()
     reader.on_tick()
@@ -48,6 +53,8 @@ end
 
 script.on_event(defines.events.on_built_entity, on_built)
 script.on_event(defines.events.on_robot_built_entity, on_built)
+script.on_event(defines.events.on_pre_surface_cleared, on_surface_erased)
+script.on_event(defines.events.on_pre_surface_deleted, on_surface_erased)
 
 script.on_event(defines.events.on_pre_player_mined_item, on_destroyed)
 script.on_event(defines.events.on_robot_pre_mined, on_destroyed)

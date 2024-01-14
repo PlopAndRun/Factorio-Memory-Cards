@@ -94,4 +94,13 @@ function _M.on_player_fast_inserted(entity, player)
     utils.fast_insert(player, find_writer(entity))
 end
 
+function _M.on_surface_erased(surface_index)
+    local writers = persistence.writers()
+    for key, holder in pairs(writers) do
+        if holder.writer.surface_index == surface_index then
+            writers[key] = nil
+        end
+    end
+end
+
 return _M
