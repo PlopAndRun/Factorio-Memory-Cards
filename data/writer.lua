@@ -14,7 +14,7 @@ local freshly_written_memorycard = {
     icons = { graphics.memorycard_item },
     subgroup = 'circuit-network',
     stack_size = 1,
-    flags = { 'not-stackable' },
+    flags = { 'not-stackable', 'hidden' },
 }
 
 local writing_recipe = {
