@@ -80,5 +80,9 @@ return {
     memorycard_item = {
         icon = graphics('memorycard-item.png'),
         icon_size = 64
+    },
+    inserted_signal = {
+        icon = graphics('inserted-signal.png'),
+        icon_size = 64
     }
 }
