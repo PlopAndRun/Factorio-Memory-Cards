@@ -11,6 +11,15 @@ local function on_built(event)
     end
 end
 
+local function on_cloned(event)
+    local source = event.source
+    if source.name == names.writer.BUILDING or source.name == names.writer.SIGNAL_RECEIVER then
+        writer.on_cloned(source, event.destination)
+    elseif source.name == names.reader.SIGNAL_SENDER or source.name == names.reader.CONTAINER or source.name == names.reader.SIGNAL_SENDER_CELL then
+        reader.on_cloned(source, event.destination)
+    end
+end
+
 local function on_destroyed(event)
     local entity = event.entity
     if entity.name == names.writer.BUILDING or entity.name == names.writer.SIGNAL_RECEIVER then
@@ -53,6 +62,7 @@ end
 
 script.on_event(defines.events.on_built_entity, on_built)
 script.on_event(defines.events.on_robot_built_entity, on_built)
+script.on_event(defines.events.on_entity_cloned, on_cloned)
 script.on_event(defines.events.on_pre_surface_cleared, on_surface_erased)
 script.on_event(defines.events.on_pre_surface_deleted, on_surface_erased)
 

@@ -28,6 +28,7 @@ function _M.register_reader(sender, reader)
     }
     if not global.readers then global.readers = {} end
     global.readers[reader.unit_number] = holder
+    return holder
 end
 
 function _M.delete_reader(holder)

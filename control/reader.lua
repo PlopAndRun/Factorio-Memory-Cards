@@ -73,8 +73,39 @@ function _M.on_built(sender)
     persistence.register_reader(sender, reader)
 end
 
+function _M.on_cloned(source, destination)
+    local reader = find_chest(source)
+    if reader == nil then return end;
+    local holder = persistence.readers()[reader.unit_number]
+    if holder.clones == nil then
+        holder.clones = {
+            total = 0,
+            required = 2,
+            cells = {}
+        }
+        if holder.cells ~= nil then
+            holder.clones.required = 2 + #holder.cells
+        end
+    end
+
+    if destination.name == names.reader.SIGNAL_SENDER_CELL then
+        table.insert(holder.clones.cells, destination)
+    else
+        holder.clones[destination.name] = destination
+    end
+    holder.clones.total = holder.clones.total + 1
+    if holder.clones.total == holder.clones.required then
+        local new_holder = persistence.register_reader(holder.clones[names.reader.SIGNAL_SENDER], holder.clones[names.reader.CONTAINER])
+        if holder.cells ~= nil then
+            new_holder.cells = holder.clones.cells
+        end
+        holder.clones = nil
+    end
+end
+
 function _M.on_destroyed(entity, player_index)
     local reader = entity.surface.find_entity(names.reader.CONTAINER, entity.position)
+    if reader == nil then return end
     local holder = persistence.readers()[reader.unit_number]
     if holder then
         if holder.cells ~= nil then
@@ -123,7 +154,7 @@ function _M.on_player_fast_inserted(entity, player)
     utils.fast_insert(player, find_chest(entity))
 end
 
-function _M.on_surface_erased(surface_index) 
+function _M.on_surface_erased(surface_index)
     local readers = persistence.readers()
     for key, holder in pairs(readers) do
         if holder.reader.surface_index == surface_index then

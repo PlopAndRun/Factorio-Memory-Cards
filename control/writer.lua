@@ -32,9 +32,26 @@ function _M.on_built(entity)
     persistence.register_writer(writer, receiver)
 end
 
+function _M.on_cloned(source, destination)
+    local writer = find_writer(source)
+    if writer == nil then return end;
+    local holder = persistence.writers()[writer.unit_number]
+    if holder.clones == nil then
+        holder.clones = { total = 0 }
+    end
+
+    holder.clones[destination.name] = destination
+    holder.clones.total = holder.clones.total + 1
+    if holder.clones.total == 2 then
+        persistence.register_writer(holder.clones[names.writer.BUILDING], holder.clones[names.writer.SIGNAL_RECEIVER])
+        holder.clones = nil
+    end
+end
+
 function _M.on_destroyed(entity, player_index)
     local surface = entity.surface
     local writer = find_writer(entity)
+    if writer == nil then return end
     local holder = persistence.writers()[writer.unit_number]
     if holder then
         persistence.delete_writer(holder)
