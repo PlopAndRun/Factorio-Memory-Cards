@@ -27,7 +27,7 @@ jobs:
       - name: Create archive
         shell: pwsh
         run: |
-          $items = Get-ChildItem . -Exclude @(".gitignore", ".git", ".vscode", ".github", "Publish", "publish.ps1")
+          $items = Get-ChildItem . -Exclude @(".gitignore", ".git", ".vscode", ".github", "Publish", "publish.ps1", "readme.md")
           Compress-Archive -Path $items -CompressionLevel Optimal -DestinationPath "$env:archive"
 
       - name: Release
