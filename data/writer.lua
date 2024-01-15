@@ -116,7 +116,10 @@ local signal_receiver = {
     },
     collision_box = { { -0.4, -0.9 }, { 0.4, 0.9 } },
     collision_mask = { 'item-layer', 'object-layer', 'player-layer', 'water-tile' },
-    minable = { mining_time = 0.5, result = names.writer.ITEM },
+    minable = {
+        mining_time = data.raw['constant-combinator']['constant-combinator'].minable.mining_time,
+        result = names.writer.ITEM
+    },
     circuit_wire_max_distance = 9,
     draw_circuit_wires = true,
     always_on = true,

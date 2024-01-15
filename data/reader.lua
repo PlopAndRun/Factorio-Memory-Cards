@@ -32,7 +32,7 @@ signal_sender.activity_led_sprites = graphics.reader_entity.active
 signal_sender.activity_led_light_offsets = { { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } }
 signal_sender.selection_priority = 40
 signal_sender.items_to_place_this = { names.reader.ITEM }
-signal_sender.minable = { mining_time = 1, result = names.reader.ITEM }
+signal_sender.minable.result = names.reader.ITEM
 
 local combinator_cell = table.deepcopy(data.raw['constant-combinator']['constant-combinator'])
 combinator_cell.name = names.reader.SIGNAL_SENDER_CELL
