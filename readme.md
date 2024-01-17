@@ -2,7 +2,7 @@
 This mod adds a new item that can store circuit network information. This opens a whole new ARRAY of possibilities, the SPACE is the limit! Store bulk data, create loops, send them in trains or in spaceships.
 
 * Fully automatable reading and writing
-* Unlimited signal storage
+* Enough space to store every signal in the network
 * Works in space and spaceships in Space Exploration
 * Blueprints are supported
 
