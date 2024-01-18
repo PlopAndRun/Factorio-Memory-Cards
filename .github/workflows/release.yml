@@ -19,16 +19,17 @@ jobs:
         run: |
           $json = Get-Content .\info.json | ConvertFrom-Json
           $version = $json.version
-          $archive = "memory-cards_$version.zip"
-          echo "$GITHUB_ENV"
+          $full_name = "memory-cards_$version"
+          $archive = "$full_name.zip"
           echo "archive=$archive" >> "$env:GITHUB_ENV"
           echo "version=$version" >> "$env:GITHUB_ENV"
+          echo "out_dir=$full_name" >> "$env:GITHUB_ENV"
                   
       - name: Create archive
         shell: pwsh
         run: |
-          $items = Get-ChildItem . -Exclude @(".gitignore", ".git", ".vscode", ".github", "Publish", "publish.ps1", "readme.md")
-          Compress-Archive -Path $items -CompressionLevel Optimal -DestinationPath "$env:archive"
+          robocopy . "$env:out_dir" /XD ".vscode" ".git" ".github" /XF ".gitignore" "readme.md" "*.xcf" "publish.ps1" /S
+          Compress-Archive -Path $env:out_dir -CompressionLevel Optimal -DestinationPath $env:archive
 
       - name: Release
-        run: gh release create "v$env:version" "$env:archive" --notes "v$env:version" --draft
+        run: gh release create "v$env:version" "$env:archive" --notes "v$env:version" --title "v$env:version" --draft
