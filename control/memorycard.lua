@@ -47,6 +47,10 @@ local function convert_signals(signals)
     return result
 end
 
+function _M.unwritten(memorycard)
+    return memorycard.get_tag(SIGNALS) == nil
+end
+
 function _M.save_data(memorycard, signals)
     memorycard.set_tag(SIGNALS, convert_signals(signals))
     memorycard.custom_description = build_description(signals)

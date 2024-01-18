@@ -8,15 +8,6 @@ local writing_recipe_category = {
     name = names.writer.RECIPE_CATEGORY
 }
 
-local freshly_written_memorycard = {
-    type = 'item',
-    name = names.memorycard.WRITE_RESULT_ITEM,
-    icons = { graphics.memorycard_item },
-    subgroup = 'circuit-network',
-    stack_size = 1,
-    flags = { 'not-stackable', 'hidden' },
-}
-
 local writing_recipe = {
     type = 'recipe',
     category = writing_recipe_category.name,
@@ -24,7 +15,7 @@ local writing_recipe = {
     ingredients = {
         { names.memorycard.ITEM, 1 }
     },
-    result = names.memorycard.WRITE_RESULT_ITEM,
+    result = names.memorycard.ITEM,
     energy_required = 1,
     hidden = false,
     hide_from_stats = false,
@@ -137,7 +128,6 @@ return {
         data:extend({
             writing_recipe_category,
             item,
-            freshly_written_memorycard,
             building,
             recipe,
             writing_recipe,

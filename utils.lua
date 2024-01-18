@@ -46,7 +46,6 @@ _M.names.MOD_PREFIX = 'memorycards-'
 
 _M.names.memorycard = {}
 _M.names.memorycard.ITEM = _M.names.MOD_PREFIX .. 'memorycard'
-_M.names.memorycard.WRITE_RESULT_ITEM = _M.names.MOD_PREFIX .. 'memorycard-written'
 _M.names.memorycard.RECIPE = _M.names.memorycard.ITEM
 
 _M.names.writer = {}

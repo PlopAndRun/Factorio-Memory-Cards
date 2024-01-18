@@ -84,12 +84,10 @@ function _M.on_tick()
     for _, holder in pairs(persistence.writers()) do
         local inventory = holder.writer.get_output_inventory()
         if not inventory.is_empty() then
-            if inventory[1].name == names.memorycard.WRITE_RESULT_ITEM
-            then
+            local item = inventory[1]
+            if item.name == names.memorycard.ITEM and memorycard.unwritten(item) then
                 local signals = holder.receiver.get_merged_signals();
-                inventory.clear()
-                inventory.insert { name = names.memorycard.ITEM, count = 1 }
-                memorycard.save_data(inventory[1], signals)
+                memorycard.save_data(item, signals)
             end
             if holder.animation == nil then
                 holder.animation = rendering.draw_animation({
