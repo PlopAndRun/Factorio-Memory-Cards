@@ -25,11 +25,23 @@ jobs:
           echo "version=$version" >> "$env:GITHUB_ENV"
           echo "out_dir=$full_name" >> "$env:GITHUB_ENV"
                   
-      - name: Create archive
+      - name: Collect files
         shell: pwsh
         run: |
+          $PSNativeCommandUseErrorActionPreference = $false
           robocopy . "$env:out_dir" /XD ".vscode" ".git" ".github" /XF ".gitignore" "readme.md" "*.xcf" "publish.ps1" /S
+          if ($LastExitCode -ge 8) {
+            Exit 1
+          }
+          else {
+            Exit 0
+          }
+
+      - name: Compress archive
+        shell: pwsh
+        run: |
           Compress-Archive -Path $env:out_dir -CompressionLevel Optimal -DestinationPath $env:archive
+
 
       - name: Release
         run: gh release create "v$env:version" "$env:archive" --notes "v$env:version" --title "v$env:version" --draft
