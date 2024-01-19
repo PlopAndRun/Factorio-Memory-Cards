@@ -25,11 +25,13 @@ jobs:
           echo "version=$version" >> "$env:GITHUB_ENV"
           echo "out_dir=$full_name" >> "$env:GITHUB_ENV"
                   
-      - name: Create archive
+      - name: Collect files
+        shell: cmd
+        run: robocopy . "$env:out_dir" /XD ".vscode" ".git" ".github" /XF ".gitignore" "readme.md" "*.xcf" "publish.ps1" /S
+
+      - name: Compress archive
         shell: pwsh
-        run: |
-          robocopy . "$env:out_dir" /XD ".vscode" ".git" ".github" /XF ".gitignore" "readme.md" "*.xcf" "publish.ps1" /S
-          Compress-Archive -Path $env:out_dir -CompressionLevel Optimal -DestinationPath $env:archive
+        run: Compress-Archive -Path $env:out_dir -CompressionLevel Optimal -DestinationPath $env:archive
 
       - name: Release
         run: gh release create "v$env:version" "$env:archive" --notes "v$env:version" --title "v$env:version" --draft
