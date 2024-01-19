@@ -26,7 +26,7 @@ jobs:
           echo "out_dir=$full_name" >> "$env:GITHUB_ENV"
                   
       - name: Collect files
-        shell: cmd
+        shell: pwsh
         run: robocopy . "$env:out_dir" /XD ".vscode" ".git" ".github" /XF ".gitignore" "readme.md" "*.xcf" "publish.ps1" /S
 
       - name: Compress archive
