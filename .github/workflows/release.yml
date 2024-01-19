@@ -31,10 +31,10 @@ jobs:
           $PSNativeCommandUseErrorActionPreference = $false
           robocopy . "$env:out_dir" /XD ".vscode" ".git" ".github" /XF ".gitignore" "readme.md" "*.xcf" "publish.ps1" /S
           if ($LastExitCode -ge 8) {
-            Exit 0
+            Exit 1
           }
           else {
-            Exit 1
+            Exit 0
           }
 
       - name: Compress archive
