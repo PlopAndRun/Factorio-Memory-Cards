@@ -31,7 +31,9 @@ jobs:
 
       - name: Compress archive
         shell: pwsh
-        run: Compress-Archive -Path $env:out_dir -CompressionLevel Optimal -DestinationPath $env:archive
+        run: |
+          $PSNativeCommandUseErrorActionPreference = $false
+          Compress-Archive -Path $env:out_dir -CompressionLevel Optimal -DestinationPath $env:archive
 
       - name: Release
         run: gh release create "v$env:version" "$env:archive" --notes "v$env:version" --title "v$env:version" --draft
