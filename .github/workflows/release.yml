@@ -34,6 +34,12 @@ jobs:
         run: |
           $PSNativeCommandUseErrorActionPreference = $false
           Compress-Archive -Path $env:out_dir -CompressionLevel Optimal -DestinationPath $env:archive
+          if ($LastExitCode -ge 8) {
+            Exit 0
+          }
+          else {
+            Exit 1
+          }
 
       - name: Release
         run: gh release create "v$env:version" "$env:archive" --notes "v$env:version" --title "v$env:version" --draft
