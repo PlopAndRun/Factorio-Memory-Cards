@@ -1,6 +1,8 @@
 local names = require('utils').names
 local writer = require 'control.writer'
 local reader = require 'control.reader'
+local memorycard_editor = require 'control.memorycard_editor'
+local persistence = require 'persistence'
 
 local function on_built(event)
     local entity = event.created_entity or event.entity
@@ -41,7 +43,7 @@ end
 
 local function on_gui_opened(event)
     local entity = event.entity
-    if not entity then return end
+        if not entity then return end
     if entity.name == names.reader.SIGNAL_SENDER then
         reader.on_gui_opened(entity, event.player_index)
     elseif entity.name == names.writer.SIGNAL_RECEIVER then
@@ -59,6 +61,31 @@ local function on_player_fast_transferred(event)
         writer.on_player_fast_inserted(entity, game.get_player(event.player_index))
     end
 end
+local function on_lua_shortcut(event)
+    if event.prototype_name == names.memorycard_editor.SHORTCUT then
+        memorycard_editor.on_lua_shortcut(event.player_index)
+    end
+end
+
+local function on_gui_click(event)
+    if event.element.name:find(names.memorycard_editor.gui.PATTERN) == 1 then
+        memorycard_editor.on_gui_click(event.player_index, event.element)
+    end
+end
+
+local function on_gui_elem_changed(event)
+    if event.element.name:find(names.memorycard_editor.gui.PATTERN) == 1 then
+        memorycard_editor.on_gui_elem_changed(event.player_index, event.element)
+    end
+end
+
+local function on_player_changed_force(event)
+    memorycard_editor.on_player_changed_force(game.get_player(event.player_index))
+end
+
+local function on_player_removed(event)
+    persistence.on_player_removed(event.player_index)
+end
 
 script.on_event(defines.events.on_built_entity, on_built)
 script.on_event(defines.events.on_robot_built_entity, on_built)
@@ -75,3 +102,8 @@ script.on_event(defines.events.on_tick, on_tick)
 
 script.on_event(defines.events.on_gui_opened, on_gui_opened)
 script.on_event(defines.events.on_player_fast_transferred, on_player_fast_transferred)
+script.on_event(defines.events.on_lua_shortcut, on_lua_shortcut)
+script.on_event(defines.events.on_gui_click, on_gui_click)
+script.on_event(defines.events.on_gui_elem_changed, on_gui_elem_changed)
+script.on_event(defines.events.on_player_changed_force, on_player_changed_force)
+script.on_event(defines.events.on_player_removed, on_player_removed)

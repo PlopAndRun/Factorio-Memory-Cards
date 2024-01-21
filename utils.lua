@@ -44,6 +44,23 @@ _M.constants = {
 _M.names = {}
 _M.names.MOD_PREFIX = 'memorycards-'
 
+_M.names.styles = {}
+_M.names.styles.STYLE_PREFIX = _M.names.MOD_PREFIX .. 'style-'
+_M.names.styles.DRAGGABLE_HEADER = _M.names.styles.STYLE_PREFIX .. 'draggable-header'
+_M.names.styles.SPACER = _M.names.styles.STYLE_PREFIX .. 'spacer'
+_M.names.styles.CARD_SLOT_ROW = _M.names.styles.STYLE_PREFIX .. 'card-slot-row'
+_M.names.styles.COPY_BUTTON = _M.names.styles.STYLE_PREFIX .. 'copy-button'
+_M.names.styles.PASTE_BUTTON = _M.names.styles.STYLE_PREFIX .. 'paste-button'
+_M.names.styles.CARD_MEMORY_SCROLLBAR = _M.names.styles.STYLE_PREFIX .. 'card-memory-scrollbar'
+_M.names.styles.CARD_SIGNALS_FRAME = _M.names.styles.STYLE_PREFIX .. 'card-signals-frame'
+_M.names.styles.CARD_SIGNALS_TABLE_STYLE = _M.names.styles.STYLE_PREFIX .. 'card-signals-table-style'
+_M.names.styles.CARD_SIGNAL_BUTTON = _M.names.styles.STYLE_PREFIX .. 'card-signal-button'
+_M.names.styles.RESET_BUTTON = _M.names.styles.STYLE_PREFIX .. 'reset-button'
+_M.names.styles.EDITOR_SIGNALS_SCROLLBAR = _M.names.styles.STYLE_PREFIX .. 'editor-signals-scrollbar'
+_M.names.styles.EDITOR_SIGNALS_CONTAINER = _M.names.styles.STYLE_PREFIX .. 'editor-signals-container'
+_M.names.styles.EDITOR_SINGLE_SIGNAL_CONTAINER = _M.names.styles.STYLE_PREFIX .. 'editor-single-signal-container'
+_M.names.styles.EDITOR_SIGNAL_COUNT = _M.names.styles.STYLE_PREFIX .. 'editor-signal-count'
+
 _M.names.memorycard = {}
 _M.names.memorycard.ITEM = _M.names.MOD_PREFIX .. 'memorycard'
 _M.names.memorycard.RECIPE = _M.names.memorycard.ITEM
@@ -66,5 +83,15 @@ _M.names.reader.SIGNAL_SENDER_CELL = _M.names.MOD_PREFIX .. 'reader-signal-sende
 
 _M.names.signal = {}
 _M.names.signal.INSERTED = _M.names.MOD_PREFIX .. 'signal-inserted'
+
+_M.names.memorycard_editor = {}
+_M.names.memorycard_editor.SHORTCUT = _M.names.MOD_PREFIX .. 'memorycard-editor-shortcut'
+_M.names.memorycard_editor.PLACEHOLDER_SPRITE = _M.names.MOD_PREFIX .. 'memorycard-editor-placeholder'
+_M.names.memorycard_editor.gui = {}
+_M.names.memorycard_editor.gui.NAME = _M.names.MOD_PREFIX .. 'memorycard-editor-gui'
+_M.names.memorycard_editor.gui.PATTERN = '^' .. _M.names.memorycard_editor.gui.NAME
+    :gsub('%-', '%%-')
+    :gsub('%.', '%%.')
+
 
 return _M

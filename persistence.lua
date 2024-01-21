@@ -8,10 +8,34 @@ function _M.readers()
     return global.readers or {}
 end
 
+function _M.editor_ui(player_index)
+    local players = global.players
+    if players == nil then
+        players = {}
+        global.players = players
+    end
+    local player = players[player_index]
+    if player == nil then
+        player = {}
+        players[player_index] = player
+    end
+    local editor_ui = player.editor_ui
+    if editor_ui == nil then
+        editor_ui = {}
+        player.editor_ui = editor_ui
+    end
+    return editor_ui
+end
+
+function _M.on_player_removed(player_index)
+    if global.players == {} then return end
+    global.players[player_index] = nil
+end
+
 function _M.register_writer(writer, receiver)
     local holder = {
         writer = writer,
-        receiver = receiver
+        receiver = receiver,
     }
     if not global.writers then global.writers = {} end
     global.writers[writer.unit_number] = holder
@@ -20,6 +44,7 @@ end
 function _M.delete_writer(holder)
     global.writers[holder.writer.unit_number] = nil
 end
+
 
 function _M.register_reader(sender, reader)
     local holder = {

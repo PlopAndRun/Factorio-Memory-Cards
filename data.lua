@@ -1,4 +1,6 @@
 require('data.memorycard').register()
+require('data.memorycard_editor').register()
 require('data.reader').register()
 require('data.signal').register()
+require('data.styles').register()
 require('data.writer').register()
