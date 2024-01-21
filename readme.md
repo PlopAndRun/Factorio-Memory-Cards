@@ -17,6 +17,8 @@ To read the stored signals you need to insert a card into a memory card reader. 
 
 Inserters can insert and remove cards into writer and readers, and only one card can be inserted at any time.
 
+You can view and edit any memory card with the helpful editor that can be accessed from shortcuts (near other tools like copy, pase and the blueprint creator). This editor shows you every signal that is written on the memory card and it allows you to edit these signals manually. The editor has an internal memory that can be used to transfer signals from one card to another.
+
 ## Known issues
 
 * The memory card writer shows a "Disabled by script" message when it is working properly. This is an implementation detail and does not affect functionality.
