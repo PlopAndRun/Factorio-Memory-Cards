@@ -18,7 +18,7 @@ if (Test-Path $out_archive) {
     Remove-Item -Force $out_archive
 }
 
-$items = Get-ChildItem -Recurse . -Exclude @(".gitignore", ".git", ".vscode", ".github", "Publish", "publish.ps1", "readme.md", "*.xcf")
+$items = Get-ChildItem -Recurse . -Exclude @(".editorconfig", ".gitignore", ".git", ".vscode", ".github", "Publish", "publish.ps1", "readme.md", "*.xcf")
 
 Write-Output "Creating archive $out_archive"
 robocopy . "$out_dir" /XD ".vscode" ".git" ".github" "publish" /XF ".gitignore" "readme.md" "*.xcf" "publish.ps1" /S

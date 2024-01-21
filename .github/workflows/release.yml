@@ -29,7 +29,7 @@ jobs:
         shell: pwsh
         run: |
           $PSNativeCommandUseErrorActionPreference = $false
-          robocopy . "$env:out_dir" /XD ".vscode" ".git" ".github" /XF ".gitignore" "readme.md" "*.xcf" "publish.ps1" /S
+          robocopy . "$env:out_dir" /XD ".vscode" ".git" ".github" /XF ".editorconfig" ".gitignore" "readme.md" "*.xcf" "publish.ps1" /S
           if ($LastExitCode -ge 8) {
             Exit 1
           }
