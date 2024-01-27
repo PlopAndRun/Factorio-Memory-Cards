@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.2.1
+Date: 27.01.2024
+  Bugfixes:
+    - Now spaceship launches in Space Exploration do not leave behind inserted memory cards
+    - Now memory card readers cannot be rotated by pressing R while hovering over them
+
+---------------------------------------------------------------------------------------------------
 Version: 0.2.0
 Date: 21.01.2024
   Features:
