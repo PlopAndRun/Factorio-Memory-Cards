@@ -48,7 +48,7 @@ function _M.on_cloned(source, destination)
     end
 end
 
-function _M.on_destroyed(entity, player_index)
+function _M.on_destroyed(entity, player_index, spill_inventory)
     local surface = entity.surface
     local writer = find_writer(entity)
     if writer == nil then return end
@@ -57,7 +57,7 @@ function _M.on_destroyed(entity, player_index)
         persistence.delete_writer(holder)
         if player_index ~= nil then
             game.players[player_index].mine_entity(holder.writer, true)
-        else
+        elseif spill_inventory then
             utils.spill_items(surface, entity.position, entity.force,
                 holder.writer.get_inventory(defines.inventory.furnace_source))
             utils.spill_items(surface, entity.position, entity.force,

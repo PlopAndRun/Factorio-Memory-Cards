@@ -103,7 +103,7 @@ function _M.on_cloned(source, destination)
     end
 end
 
-function _M.on_destroyed(entity, player_index)
+function _M.on_destroyed(entity, player_index, spill_inventory)
     local reader = entity.surface.find_entity(names.reader.CONTAINER, entity.position)
     if reader == nil then return end
     local holder = persistence.readers()[reader.unit_number]
@@ -114,7 +114,7 @@ function _M.on_destroyed(entity, player_index)
         persistence.delete_reader(holder)
         if player_index ~= nil then
             game.players[player_index].mine_entity(holder.reader, true)
-        else
+        elseif spill_inventory then
             local inventory = holder.reader.get_inventory(defines.inventory.chest)
             utils.spill_items(entity.surface, entity.position, entity.force, inventory)
             holder.reader.destroy()
