@@ -2,6 +2,7 @@ local utils = require 'utils'
 local graphics = require 'graphics.definitions'
 local names = utils.names
 local constants = utils.constants
+local other_mods = utils.other_mods
 
 local inventory = {
     type = 'container',
@@ -69,6 +70,13 @@ local recipe = {
     enabled = false,
     order = 'c[combinators]-m[memorycard-reader]',
 }
+
+if other_mods.ULTRACUBE then
+    table.insert(recipe.ingredients, 1, { 'cube-basic-matter-unit', 1, })
+    recipe.order = 'cube-' .. recipe.order
+    recipe.category = 'cube-fabricator-handcraft'
+    item.subgroup = 'cube-combinator-extra'
+end
 
 return {
     register = function()

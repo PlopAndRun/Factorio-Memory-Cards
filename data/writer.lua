@@ -2,6 +2,7 @@ local utils = require 'utils'
 local graphics = require 'graphics.definitions'
 local names = utils.names
 local constants = utils.constants
+local other_mods = utils.other_mods
 
 local writing_recipe_category = {
     type = 'recipe-category',
@@ -122,6 +123,14 @@ local signal_receiver = {
 local animation = table.deepcopy(graphics.writer_entity.ready_animation)
 animation.type = 'animation'
 animation.name = names.writer.READY_ANIMATION
+
+if other_mods.ULTRACUBE then
+    table.insert(recipe.ingredients, 1, { 'cube-basic-matter-unit', 1 } )
+    recipe.order = 'cube-' .. recipe.order
+    recipe.category = 'cube-fabricator-handcraft'
+    writing_recipe.order = 'cube-' .. writing_recipe.name
+    item.subgroup = 'cube-combinator-extra'
+end
 
 return {
     register = function()

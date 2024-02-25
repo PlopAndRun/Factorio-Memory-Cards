@@ -1,5 +1,9 @@
 local _M = {}
 
+_M.other_mods = {
+    ULTRACUBE = mods and mods['Ultracube'],
+}
+
 function _M.spill_items(surface, position, force, inventory)
     for _, index in pairs(inventory.get_contents()) do
         local item = inventory[index]
@@ -20,7 +24,13 @@ function _M.fast_insert(player, entity)
 end
 
 function _M.add_recipe_to_unlocks(recipe)
-    table.insert(data.raw["technology"]["circuit-network"].effects, {
+    local technology
+    if _M.other_mods.ULTRACUBE then
+        technology = data.raw['technology']['cube-combinatorics']
+    else
+        technology = data.raw['technology']['circuit-network']
+    end
+    table.insert(technology.effects, {
         type = 'unlock-recipe',
         recipe = recipe.name,
     })

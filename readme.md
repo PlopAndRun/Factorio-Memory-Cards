@@ -4,6 +4,7 @@ This mod adds a new item that can store circuit network information. This opens 
 * Fully automatable reading and writing
 * Enough space to store every signal in the network
 * Works in space and spaceships in Space Exploration
+* Compatible with Ultracube
 * Blueprints are supported
 
 ## New Content

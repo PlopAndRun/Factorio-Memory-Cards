@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.2.2
+Date: 25.02.2024
+  Compatibility:
+    - Added compatibilty with Ultracube: Age of Cube
+      Plastic is not required to produce memory cards when this mod is enabled
+
+---------------------------------------------------------------------------------------------------
 Version: 0.2.1
 Date: 27.01.2024
   Bugfixes:
