@@ -10,6 +10,7 @@ local MEMORYCARD_SLOT = GUI_PREFIX .. '.memorycard-slot'
 local READ_BUTTON = GUI_PREFIX .. '.read'
 local RESET_BUTTON = GUI_PREFIX .. '.reset-button'
 local SIGNAL_CHOOSE_BUTTON = GUI_PREFIX .. '.signal-choose-button'
+local SIGNAL_COLOR_SWITCH = GUI_PREFIX .. '.signal-color-switch'
 local WINDOW = GUI_PREFIX .. '.window'
 local WRITE_BUTTON = GUI_PREFIX .. '.write'
 
@@ -182,6 +183,52 @@ local function create_card_ui(parent, available_size)
     }
 end
 
+local function draw_signals(gui_info, signals, style)
+    if not signals then return end
+    for _, signal in pairs(signals) do
+        local sprite = ''
+        local tooltip = nil
+        if signal.signal.type == 'virtual' then
+            sprite = 'virtual-signal/' .. signal.signal.name
+            tooltip = {
+                type = 'signal',
+                name = signal.signal.name,
+            }
+        elseif signal.signal.type == 'item' then
+            sprite = 'item/' .. signal.signal.name
+            tooltip = {
+                type = 'item',
+                name = signal.signal.name,
+            }
+        elseif signal.signal.type == 'fluid' then
+            sprite = 'fluid/' .. signal.signal.name
+            tooltip = {
+                type = 'fluid',
+                name = signal.signal.name,
+            }
+        end
+
+        if not game.is_valid_sprite_path(sprite) then
+            sprite = 'utility/questionmark'
+        end
+
+        local parameters = {
+            type = 'sprite-button',
+            style = style,
+            sprite = sprite,
+            number = signal.count,
+            elem_tooltip = tooltip,
+        }
+
+        local success, button = pcall(gui_info.card_ui.signals.add, parameters)
+
+        if not success then
+            parameters.elem_tooltip = nil
+            parameters.tooltip = signal.signal.name
+        end
+    end
+end
+
 local function update_card_ui(gui_info, player)
     local inventory = gui_info.inserted_cards[player.force.index]
     gui_info.card_ui.signals.clear()
@@ -198,47 +245,10 @@ local function update_card_ui(gui_info, player)
         gui_info.card_ui.hint.visible = false
         gui_info.card_ui.copy_button.visible = true
         gui_info.card_ui.paste_button.visible = true
-        for _, signal in pairs(memorycard.read_data(card)) do
-            local sprite = ''
-            local tooltip = nil
-            if signal.signal.type == 'virtual' then
-                sprite = 'virtual-signal/' .. signal.signal.name
-                tooltip = {
-                    type = 'signal',
-                    name = signal.signal.name,
-                }
-            elseif signal.signal.type == 'item' then
-                sprite = 'item/' .. signal.signal.name
-                tooltip = {
-                    type = 'item',
-                    name = signal.signal.name,
-                }
-            elseif signal.signal.type == 'fluid' then
-                sprite = 'fluid/' .. signal.signal.name
-                tooltip = {
-                    type = 'fluid',
-                    name = signal.signal.name,
-                }
-            end
-
-            if not game.is_valid_sprite_path(sprite) then
-                sprite = 'utility/questionmark'
-            end
-
-            local parameters = {
-                type = 'sprite-button',
-                style = styles.CARD_SIGNAL_BUTTON,
-                sprite = sprite,
-                number = signal.count,
-                elem_tooltip = tooltip,
-            }
-
-            if not pcall(gui_info.card_ui.signals.add, parameters) then
-                parameters.elem_tooltip = nil
-                parameters.tooltip = signal.signal.name
-                gui_info.card_ui.signals.add(parameters)
-            end
-        end
+        local data = memorycard.read_data(card)
+        draw_signals(gui_info, data.combined, styles.CARD_SIGNAL_BUTTON)
+        draw_signals(gui_info, data.red, styles.CARD_SIGNAL_BUTTON_RED)
+        draw_signals(gui_info, data.green, styles.CARD_SIGNAL_BUTTON_GREEN)
     end
 end
 
@@ -300,7 +310,7 @@ local function create_signals_ui(root, available_size)
     }
 end
 
-local function create_signal_ui(gui_info, signal)
+local function create_signal_ui(gui_info, signal, network)
     local pane = gui_info.signals_pane
 
     local vertical_layout = pane.children[#pane.children]
@@ -320,6 +330,7 @@ local function create_signal_ui(gui_info, signal)
     signal_container.add {
         type = 'choose-elem-button',
         name = SIGNAL_CHOOSE_BUTTON .. '-' .. tostring(#vertical_layout.children + 1),
+        style = network == 'red' and styles.CARD_SIGNAL_BUTTON_RED or network == 'green' and styles.CARD_SIGNAL_BUTTON_GREEN or nil,
         elem_type = 'signal',
         signal = signal.signal,
     }
@@ -332,20 +343,42 @@ local function create_signal_ui(gui_info, signal)
         text = signal.count or '',
         style = styles.EDITOR_SIGNAL_COUNT,
     }
+
+    signal_container.add {
+        type = 'switch',
+        name = SIGNAL_COLOR_SWITCH .. '-' .. tostring(#vertical_layout.children + 1),
+        allow_none_state = true,
+        switch_state = network == 'red' and 'left' or network == 'green' and 'right' or 'none',
+        left_label_caption = { '', '[item=red-wire]', },
+        right_label_caption = { '', '[item=green-wire]', },
+    }
 end
 
 local function create_empty_signal_ui(gui_info)
-    create_signal_ui(gui_info, { signal = nil, count = nil, })
+    create_signal_ui(gui_info, { signal = nil, count = nil, }, 'both')
 end
 
 local function create_signals(signals_pane)
-    local signals = {}
+    local signals = {
+        combined = {},
+        red = {},
+        green = {},
+    }
     for _, column in pairs(signals_pane.children) do
         for _, signal_layout in pairs(column.children) do
             local signal = signal_layout.children[1].elem_value
             local count = tonumber(signal_layout.children[2].text)
+            local switch = signal_layout.children[3].switch_state
             if signal ~= nil and count ~= nil and count ~= 0 then
-                table.insert(signals, {
+                local channel
+                if switch == 'left' then
+                    channel = signals.red
+                elseif switch == 'right' then
+                    channel = signals.green
+                else
+                    channel = signals.combined
+                end
+                table.insert(channel, {
                     signal = signal,
                     count = count,
                 })
@@ -474,6 +507,23 @@ function _M.on_gui_elem_changed(player_index, button)
     end
 end
 
+function _M.on_gui_switch_state_changed(player_index, element)
+    local player = game.get_player(player_index)
+    if player == nil then return end
+
+    local gui_info = persistence.editor_ui(player_index)
+    if gui_info == nil or gui_info.root == nil then
+        return
+    end
+
+    local button_flow = element.parent
+    local choose_elem_button = button_flow.children[1]
+    choose_elem_button.style =
+        element.switch_state == 'left' and styles.EDITOR_SIGNAL_BUTTON_RED or
+        element.switch_state == 'right' and styles.EDITOR_SIGNAL_BUTTON_GREEN or
+        styles.EDITOR_SIGNAL_BUTTON
+end
+
 function _M.on_gui_click(player_index, element)
     local player = game.get_player(player_index)
     if player == nil then
@@ -495,8 +545,15 @@ function _M.on_gui_click(player_index, element)
     elseif element.name == READ_BUTTON then
         if inserted_card ~= nil then
             gui_info.signals_pane.clear()
-            for _, signal in pairs(memorycard.read_data(inserted_card)) do
-                create_signal_ui(gui_info, signal)
+            data = memorycard.read_data(inserted_card)
+            for _, signal in pairs(data.combined) do
+                create_signal_ui(gui_info, signal, 'both')
+            end
+            for _, signal in pairs(data.red) do
+                create_signal_ui(gui_info, signal, 'red')
+            end
+            for _, signal in pairs(data.green) do
+                create_signal_ui(gui_info, signal, 'green')
             end
             create_empty_signal_ui(gui_info)
         end

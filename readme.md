@@ -12,7 +12,7 @@ This mod adds a memory card item, a memory card writer machine and a memory card
 
 A memory card can store any amount of circuit network signals. 
 
-To write signals on a card you need to insert it into a memory cards writer. When the write operation is finished all signals from both connected wires will get saved on the memory card. 
+To write signals on a card you need to insert it into a memory cards writer. When the write operation is finished all signals from both connected wires will get saved on the memory card.
 
 To read the stored signals you need to insert a card into a memory card reader. When a card is inserted, the reader will send a special signal plus the card's contents to the connected wires.
 
@@ -20,7 +20,10 @@ Inserters can insert and remove cards into writer and readers, and only one card
 
 You can view and edit any memory card with the helpful editor that can be accessed from shortcuts (near other tools like copy, pase and the blueprint creator). This editor shows you every signal that is written on the memory card and it allows you to edit these signals manually. The editor has an internal memory that can be used to transfer signals from one card to another.
 
-## Known issues
+## Now comes with channel support
+Now writers have an option to write data to separate channels on the memory card. By default this option is disabled, but to enable it you can open the writer's UI and check the checkbox 'Write channels separately'. 
 
-* The memory card writer shows a "Disabled by script" message when it is working properly. This is an implementation detail and does not affect functionality.
+In the editor you can also specify the color for each signal or leave it colorless to add the signal to both networks.
+
+## Known issues
 * Currently, pasting in Blueprint Sandboxes is not supported, but blueprints made in blueprint sandboxes manually will work in the real world.

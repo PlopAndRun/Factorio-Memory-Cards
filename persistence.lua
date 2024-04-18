@@ -36,15 +36,22 @@ function _M.register_writer(writer, receiver)
     local holder = {
         writer = writer,
         receiver = receiver,
+        options = {
+            use_channels = false
+        }
     }
     if not global.writers then global.writers = {} end
     global.writers[writer.unit_number] = holder
+    return holder
 end
 
 function _M.delete_writer(holder)
     global.writers[holder.writer.unit_number] = nil
 end
 
+function _M.copy_writer_options(source, destination)
+    destination.options.use_channels = source.options.use_channels
+end
 
 function _M.register_reader(sender, reader)
     local holder = {

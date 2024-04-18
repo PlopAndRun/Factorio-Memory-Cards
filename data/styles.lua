@@ -1,6 +1,14 @@
 local styles = require('utils').names.styles
 local gui_style = data.raw['gui-style'].default
 
+local function signal_button(size, parent_style)
+    return {
+        type = 'button_style',
+        parent = parent_style,
+        size = size,
+    }
+end
+
 return {
     register = function ()
         gui_style[styles.DRAGGABLE_HEADER] = {
@@ -60,13 +68,13 @@ return {
             padding = 3,
         }
 
-        gui_style[styles.CARD_SIGNAL_BUTTON] = {
-            type = 'button_style',
-            parent = 'slot',
-            width = 36,
-            height = 36,
-            font = 'default-semibold',
-        }
+        gui_style[styles.CARD_SIGNAL_BUTTON] = signal_button(36, 'slot')
+        gui_style[styles.CARD_SIGNAL_BUTTON_RED] = signal_button(36, 'flib_slot_button_red')
+        gui_style[styles.CARD_SIGNAL_BUTTON_GREEN] = signal_button(36, 'flib_slot_button_green')
+
+        gui_style[styles.EDITOR_SIGNAL_BUTTON] = signal_button(40, 'slot')
+        gui_style[styles.EDITOR_SIGNAL_BUTTON_RED] = signal_button(40, 'flib_slot_button_red')
+        gui_style[styles.EDITOR_SIGNAL_BUTTON_GREEN] = signal_button(40, 'flib_slot_button_green')
 
         gui_style[styles.RESET_BUTTON] = {
             type = 'button_style',
@@ -83,7 +91,7 @@ return {
 
         gui_style[styles.EDITOR_SIGNALS_CONTAINER] = {
             type = 'horizontal_flow_style',
-            horizontal_spacing = 40,
+            horizontal_spacing = 60,
         }
 
         gui_style[styles.EDITOR_SINGLE_SIGNAL_CONTAINER] = {
@@ -94,6 +102,13 @@ return {
         gui_style[styles.EDITOR_SIGNAL_COUNT] = {
             type = 'textbox_style',
             width = 100,
+        }
+
+        gui_style[styles.MACHINE_OPTIONS_FRAME] = {
+            type = 'frame_style',
+            parent = 'inside_shallow_frame',
+            vertically_stretchable = 'on',
+            padding = 12,
         }
     end,
 }

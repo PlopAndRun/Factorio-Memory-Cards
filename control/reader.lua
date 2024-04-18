@@ -9,10 +9,8 @@ local function find_chest(entity)
     return entity.surface.find_entity(names.reader.CONTAINER, entity.position)
 end
 
-local function create_cells(holder, card)
+local function create_cells_for_channel(cells, holder, data, connect_red, connect_green)
     local surface = holder.reader.surface
-    local data = memorycard.read_data(card)
-    local cells = {}
     local cell = nil
     local cell_control_behavior = nil
     local index = constants.READER_SLOTS
@@ -31,19 +29,38 @@ local function create_cells(holder, card)
             }
             cell.destructible = false;
             table.insert(cells, cell)
-            holder.sender.connect_neighbour {
-                wire = defines.wire_type.red,
-                target_entity = cell,
-            }
-            holder.sender.connect_neighbour {
-                wire = defines.wire_type.green,
-                target_entity = cell,
-            }
+            if connect_red then
+                holder.sender.connect_neighbour {
+                    wire = defines.wire_type.red,
+                    target_entity = cell,
+                }
+            end
+            if connect_green then
+                holder.sender.connect_neighbour {
+                    wire = defines.wire_type.green,
+                    target_entity = cell,
+                }
+            end
             cell_control_behavior = cell.get_or_create_control_behavior()
         end
         index = index + 1
         assert(cell_control_behavior)
         cell_control_behavior.set_signal(index, v)
+    end
+    return cells
+end
+
+local function create_cells(holder, card)
+    local data = memorycard.read_data(card)
+    local cells = {}
+    if #data.combined > 0 then
+        create_cells_for_channel(cells, holder, data.combined, true, true)
+    end
+    if #data.red > 0 then
+        create_cells_for_channel(cells, holder, data.red, true, false)
+    end
+    if #data.green > 0 then
+        create_cells_for_channel(cells, holder, data.green, false, true)
     end
     holder.cells = cells
 end
@@ -66,7 +83,7 @@ function _M.on_built(sender)
         name = names.reader.CONTAINER,
         position = position,
         force = sender.force,
-        create_build_effect_smoke = false
+        create_build_effect_smoke = false,
     }
     local inventory = reader.get_inventory(defines.inventory.chest)
     inventory.set_filter(1, names.memorycard.ITEM)
@@ -81,7 +98,7 @@ function _M.on_cloned(source, destination)
         holder.clones = {
             total = 0,
             required = 2,
-            cells = {}
+            cells = {},
         }
         if holder.cells ~= nil then
             holder.clones.required = 2 + #holder.cells
@@ -95,7 +112,8 @@ function _M.on_cloned(source, destination)
     end
     holder.clones.total = holder.clones.total + 1
     if holder.clones.total == holder.clones.required then
-        local new_holder = persistence.register_reader(holder.clones[names.reader.SIGNAL_SENDER], holder.clones[names.reader.CONTAINER])
+        local new_holder = persistence.register_reader(holder.clones[names.reader.SIGNAL_SENDER],
+            holder.clones[names.reader.CONTAINER])
         if holder.cells ~= nil then
             new_holder.cells = holder.clones.cells
         end
@@ -126,12 +144,13 @@ function _M.on_tick()
     for _, holder in pairs(persistence.readers()) do
         local inventory = holder.reader.get_inventory(defines.inventory.chest)
         if not inventory.is_empty()
-            and inventory[1].name == names.memorycard.ITEM
+            and (inventory[1].name == names.memorycard.ITEM
+                or inventory[1].name == names.memorycard_with_channels.ITEM)
         then
             if holder.cells == nil then
                 create_cells(holder, inventory[1])
                 local cb = holder.sender.get_or_create_control_behavior()
-                cb.set_signal(1, { signal = { type = 'virtual', name = names.signal.INSERTED }, count = 1 })
+                cb.set_signal(1, { signal = { type = 'virtual', name = names.signal.INSERTED, }, count = 1, })
             end
         else
             if holder.cells ~= nil then
