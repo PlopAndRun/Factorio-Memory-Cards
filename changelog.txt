@@ -1,10 +1,10 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.3.0
-Date: 25.02.2024
+Date: 21.04.2024
   Features:
     - Added red and green channels to memory cards
-	- Memory card writers now have a checkbox that enables writing signals in separate channels
-	- Editor can view and edit channels
+    - Memory card writers now have a checkbox that enables writing signals in separate channels
+    - Editor can view and edit channels
 
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.2
