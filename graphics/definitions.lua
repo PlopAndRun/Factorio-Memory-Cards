@@ -58,7 +58,7 @@ return {
             },
         },
         ready_animation = {
-            filenmae = graphics('writer-entity.png'),
+            filename = graphics('writer-entity.png'),
             size = { 42, 69, },
             position = { 126, 0, },
             hr_version = {
