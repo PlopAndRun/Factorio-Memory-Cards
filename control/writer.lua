@@ -65,7 +65,8 @@ function _M.on_cloned(source, destination)
     holder.clones[destination.name] = destination
     holder.clones.total = holder.clones.total + 1
     if holder.clones.total == 2 then
-        local cloned_holder = persistence.register_writer(holder.clones[names.writer.BUILDING], holder.clones[names.writer.SIGNAL_RECEIVER])
+        local cloned_holder = persistence.register_writer(holder.clones[names.writer.BUILDING],
+            holder.clones[names.writer.SIGNAL_RECEIVER])
         persistence.copy_writer_options(holder, cloned_holder)
         holder.clones = nil
     end
@@ -119,7 +120,7 @@ function _M.on_tick()
 
             if item.name == names.memorycard.ITEM and memorycard.unwritten(item) then
                 local signals = get_signals(holder)
-                memorycard.save_data(item, signals)
+                memorycard.save_data(item, signals, holder.options)
             end
 
             if holder.animation == nil then

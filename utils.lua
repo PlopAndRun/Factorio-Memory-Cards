@@ -36,6 +36,19 @@ function _M.add_recipe_to_unlocks(recipe)
     })
 end
 
+function _M.trim_string(str)
+    return str:gsub("^%s*(.-)%s*$", "%1")
+end
+
+function _M.trim_nilable_string(str)
+    local trimmed = _M.trim_string(str)
+    if trimmed == '' then
+        return nil
+    else
+        return trimmed
+    end
+end
+
 _M.constants = {
     READER_SLOTS = 20,
     HIDDEN_ENTITY_FLAGS = { 'placeable-off-grid',
@@ -60,6 +73,7 @@ _M.names.styles.DRAGGABLE_HEADER = _M.names.styles.STYLE_PREFIX .. 'draggable-he
 _M.names.styles.SPACER = _M.names.styles.STYLE_PREFIX .. 'spacer'
 
 _M.names.styles.CARD_SLOT_ROW = _M.names.styles.STYLE_PREFIX .. 'card-slot-row'
+_M.names.styles.CARD_CONTROLS_FLOW = _M.names.styles.STYLE_PREFIX .. 'card-controls'
 _M.names.styles.COPY_BUTTON = _M.names.styles.STYLE_PREFIX .. 'copy-button'
 _M.names.styles.PASTE_BUTTON = _M.names.styles.STYLE_PREFIX .. 'paste-button'
 _M.names.styles.CARD_MEMORY_SCROLLBAR = _M.names.styles.STYLE_PREFIX .. 'card-memory-scrollbar'
@@ -68,7 +82,12 @@ _M.names.styles.CARD_SIGNALS_TABLE_STYLE = _M.names.styles.STYLE_PREFIX .. 'card
 _M.names.styles.CARD_SIGNAL_BUTTON = _M.names.styles.STYLE_PREFIX .. 'card-signal-button'
 _M.names.styles.CARD_SIGNAL_BUTTON_RED = _M.names.styles.STYLE_PREFIX .. 'card-signal-button-red'
 _M.names.styles.CARD_SIGNAL_BUTTON_GREEN = _M.names.styles.STYLE_PREFIX .. 'card-signal-button-green'
+
 _M.names.styles.RESET_BUTTON = _M.names.styles.STYLE_PREFIX .. 'reset-button'
+_M.names.styles.RED_BUTTON = _M.names.styles.STYLE_PREFIX .. 'red-button'
+_M.names.styles.GREEN_BUTTON = _M.names.styles.STYLE_PREFIX .. 'green-button'
+_M.names.styles.INLINE_BUTTON = _M.names.styles.STYLE_PREFIX .. 'inline-button'
+
 _M.names.styles.EDITOR_SIGNAL_BUTTON = _M.names.styles.STYLE_PREFIX .. 'editor-signal-button'
 _M.names.styles.EDITOR_SIGNAL_BUTTON_RED = _M.names.styles.STYLE_PREFIX .. 'editor-signal-button-red'
 _M.names.styles.EDITOR_SIGNAL_BUTTON_GREEN = _M.names.styles.STYLE_PREFIX .. 'editor-signal-button-green'

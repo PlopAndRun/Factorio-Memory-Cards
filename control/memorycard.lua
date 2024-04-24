@@ -6,8 +6,10 @@ local SIGNALS = names.MOD_PREFIX .. 'signals'
 local RED_SIGNALS = names.MOD_PREFIX .. 'red-signals'
 local GREEN_SIGNALS = names.MOD_PREFIX .. 'green-signals'
 local CHANNEL_INDENT = '        '
+local LABEL = names.MOD_PREFIX .. 'label'
+local LIST_CONTENTS = names.MOD_PREFIX .. 'list_contents'
 
-local function build_description(signals)
+local function build_signals_description(signals)
     if not signals then
         return { 'description.memorycard-empty', }
     end
@@ -46,7 +48,7 @@ local function build_channeled_description(signals)
             { 'memorycards.combined-channel-description', },
             '\n',
         })
-        table.insert(builder, build_description(signals.combined))
+        table.insert(builder, build_signals_description(signals.combined))
         added_text = true
     end
 
@@ -58,7 +60,7 @@ local function build_channeled_description(signals)
             { 'memorycards.red-channel-description', },
             '\n',
         })
-        table.insert(builder, build_description(signals.red))
+        table.insert(builder, build_signals_description(signals.red))
         added_text = true
     end
 
@@ -70,12 +72,8 @@ local function build_channeled_description(signals)
             { 'memorycards.green-channel-description', },
             '\n',
         });
-        table.insert(builder, build_description(signals.green))
+        table.insert(builder, build_signals_description(signals.green))
         added_text = true
-    end
-
-    if not added_text then
-        return { 'description.memorycard-empty', }
     end
 
     return builder
@@ -98,7 +96,37 @@ function _M.unwritten(memorycard)
     return memorycard.get_tag(SIGNALS) == nil
 end
 
-function _M.save_data(memorycard, signals)
+function _M.generate_description(memorycard, signals, options)
+    memorycard.set_tag(LABEL, options.label)
+    memorycard.set_tag(LIST_CONTENTS, options.list_contents)
+
+    if signals == nil then
+        signals = _M.read_data(memorycard)
+    end
+
+    local description = { '', }
+    if options.label then
+        local label_line = {
+            '[color=255,230,192]',
+            options.label,
+            '[/color]',
+            '\n',
+        }
+        table.insert(description, table.concat(label_line))
+    end
+
+    local total_signals = #signals.combined + #signals.red + #signals.green
+    if total_signals == 0 then
+        table.insert(description, { 'description.memorycard-empty', })
+    elseif options.list_contents then
+        table.insert(description, build_channeled_description(signals))
+    else
+        table.insert(description, { 'memorycards.total-signals', total_signals, })
+    end
+    memorycard.custom_description = description
+end
+
+function _M.save_data(memorycard, signals, options)
     if signals.combined and #signals.combined > 0 then
         memorycard.set_tag(SIGNALS, convert_signals(signals.combined))
     else
@@ -106,6 +134,7 @@ function _M.save_data(memorycard, signals)
     end
 
     if signals.red and #signals.red > 0 then
+        memorycard.set_tag(SIGNALS, convert_signals(signals.combined))
         memorycard.set_tag(RED_SIGNALS, convert_signals(signals.red))
     else
         memorycard.remove_tag(RED_SIGNALS)
@@ -117,7 +146,7 @@ function _M.save_data(memorycard, signals)
         memorycard.remove_tag(GREEN_SIGNALS)
     end
 
-    memorycard.custom_description = build_channeled_description(signals)
+    _M.generate_description(memorycard, signals, options)
 end
 
 function _M.read_data(memorycard)
@@ -126,6 +155,17 @@ function _M.read_data(memorycard)
         red = memorycard.get_tag(RED_SIGNALS) or {},
         green = memorycard.get_tag(GREEN_SIGNALS) or {},
     }
+end
+
+function _M.read_options(memorycard)
+    local options = {
+        label = memorycard.get_tag(LABEL),
+        list_contents = memorycard.get_tag(LIST_CONTENTS),
+    }
+    if options.list_contents == nil then
+        options.list_contents = true
+    end
+    return options
 end
 
 return _M

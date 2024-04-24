@@ -1,4 +1,5 @@
 local GUI_PREFIX = require('utils').names.memorycard_editor.gui.NAME
+local utils = require 'utils'
 local names = require('utils').names
 local styles = require('utils').names.styles
 local memorycard = require 'control.memorycard'
@@ -13,6 +14,10 @@ local SIGNAL_CHOOSE_BUTTON = GUI_PREFIX .. '.signal-choose-button'
 local SIGNAL_COLOR_SWITCH = GUI_PREFIX .. '.signal-color-switch'
 local WINDOW = GUI_PREFIX .. '.window'
 local WRITE_BUTTON = GUI_PREFIX .. '.write'
+local LABEL_APPLY = GUI_PREFIX .. '.apply-label'
+local LABEL_CANCEL = GUI_PREFIX .. '.cancel-label'
+local LABEL_EDIT = GUI_PREFIX .. '.edit-label'
+local LIST_CONTENTS = GUI_PREFIX .. '.list-label'
 
 local DEFAULT_PADDING = 12
 local ROW_SPACING = 4
@@ -43,6 +48,84 @@ local function create_main_window(player)
             scale = scale,
         },
     }
+end
+
+local function create_label_viewer(parent, index, label)
+    local layout = parent.add {
+        type = 'flow',
+        orientation = 'horizontal',
+        index = index,
+    }
+
+    if label then
+        layout.add {
+            type = 'label',
+            style = 'caption_label',
+            caption = { 'memorycards-writer-options.custom-label', },
+            tooltip = { 'memorycards-writer-options.custom-label-tooltip', },
+        }
+
+        layout.add {
+            type = 'label',
+            caption = label,
+        }
+    else
+        layout.add {
+            type = 'label',
+            style = 'caption_label',
+            caption = { 'memorycards-writer-options.custom-label-empty', },
+            tooltip = { 'memorycards-writer-options.custom-label-tooltip', },
+        }
+    end
+
+    layout.add {
+        name = LABEL_EDIT,
+        type = 'sprite-button',
+        style = styles.INLINE_BUTTON,
+        sprite = 'utility/rename_icon_small_black',
+        tooltip = { 'memorycards-writer-options.custom-label-edit-button-tooltip', },
+    }
+
+    return layout
+end
+
+local function recreate_label_viewer(gui_info, label)
+    local parent = gui_info.card_ui.label_layout.parent
+    local index = gui_info.card_ui.label_layout.get_index_in_parent()
+    gui_info.card_ui.label_layout.destroy()
+    gui_info.card_ui.label_layout = create_label_viewer(parent, index, label)
+end
+
+local function create_label_editor(parent, index, label)
+    local layout = parent.add {
+        type = 'flow',
+        orientation = 'horizontal',
+        index = index,
+    }
+
+    local textfield = layout.add {
+        type = 'textfield',
+        text = label or '',
+    }
+
+    textfield.select_all()
+    textfield.focus()
+
+    layout.add {
+        name = LABEL_APPLY,
+        type = 'sprite-button',
+        style = styles.GREEN_BUTTON,
+        sprite = 'utility/enter',
+    }
+
+    layout.add {
+        name = LABEL_CANCEL,
+        type = 'sprite-button',
+        style = styles.RED_BUTTON,
+        sprite = 'utility/close_white',
+    }
+
+    return layout
 end
 
 local function create_titlebar(parent, available_size)
@@ -115,7 +198,15 @@ local function create_card_ui(parent, available_size)
         style = styles.SPACER,
     }
 
-    local slot_row = root.add {
+    local controls_flow = root.add {
+        type = 'flow',
+        direction = 'vertical',
+        style = styles.CARD_CONTROLS_FLOW,
+    }
+
+    local label = create_label_viewer(controls_flow, #controls_flow.children + 1, nil)
+
+    local slot_row = controls_flow.add {
         type = 'flow',
         direction = 'horizontal',
         style = styles.CARD_SLOT_ROW,
@@ -146,12 +237,20 @@ local function create_card_ui(parent, available_size)
         style = 'bold_label',
     }
 
-    local paste_button = root.add {
+    local paste_button = controls_flow.add {
         type = 'button',
         name = WRITE_BUTTON,
         caption = { 'memorycards-editor.memory-card-section-paste-caption', },
         tooltip = { 'memorycards-editor.memory-card-section-paste-tooltip', },
         style = styles.PASTE_BUTTON,
+    }
+
+    local list_contents = controls_flow.add {
+        type = 'checkbox',
+        name = LIST_CONTENTS,
+        caption = { 'memorycards-writer-options.list-contents', },
+        tooltip = { 'memorycards-writer-options.list-contents-tooltip', },
+        state = false,
     }
 
     local scrollbar = root.add {
@@ -180,6 +279,8 @@ local function create_card_ui(parent, available_size)
         copy_button = copy_button,
         paste_button = paste_button,
         hint = hint,
+        label_layout = label,
+        list_contents_checkbox = list_contents,
     }
 end
 
@@ -238,6 +339,8 @@ local function update_card_ui(gui_info, player)
         gui_info.card_ui.copy_button.visible = false
         gui_info.card_ui.paste_button.visible = false
         gui_info.card_ui.hint.visible = true
+        gui_info.card_ui.label_layout.visible = false
+        gui_info.card_ui.list_contents_checkbox.visible = false
     else
         local card = inventory[1]
         gui_info.card_ui.slot.sprite = 'item/' .. card.name
@@ -245,6 +348,13 @@ local function update_card_ui(gui_info, player)
         gui_info.card_ui.hint.visible = false
         gui_info.card_ui.copy_button.visible = true
         gui_info.card_ui.paste_button.visible = true
+        gui_info.card_ui.label_layout.visible = true
+        gui_info.card_ui.list_contents_checkbox.visible = true
+
+        local options = memorycard.read_options(card)
+        recreate_label_viewer(gui_info, options.label)
+        gui_info.card_ui.list_contents_checkbox.state = options.list_contents
+
         local data = memorycard.read_data(card)
         draw_signals(gui_info, data.combined, styles.CARD_SIGNAL_BUTTON)
         draw_signals(gui_info, data.red, styles.CARD_SIGNAL_BUTTON_RED)
@@ -347,7 +457,7 @@ local function create_signal_ui(gui_info, signal, network)
     signal_container.add {
         type = 'switch',
         name = SIGNAL_COLOR_SWITCH .. '-' .. tostring(#vertical_layout.children + 1),
-        tooltip = { 'memorycards-editor.editor-section-channel-switch-help' },
+        tooltip = { 'memorycards-editor.editor-section-channel-switch-help', },
         allow_none_state = true,
         switch_state = network == 'red' and 'left' or network == 'green' and 'right' or 'none',
         left_label_caption = { '', '[item=red-wire]', },
@@ -560,7 +670,7 @@ function _M.on_gui_click(player_index, element)
         end
     elseif element.name == WRITE_BUTTON then
         if inserted_card ~= nil then
-            memorycard.save_data(inserted_card, create_signals(gui_info.signals_pane))
+            memorycard.save_data(inserted_card, create_signals(gui_info.signals_pane), {})
             update_card_ui(gui_info, player)
         end
     elseif element.name == MEMORYCARD_SLOT then
@@ -574,6 +684,42 @@ function _M.on_gui_click(player_index, element)
     elseif element.name == RESET_BUTTON then
         gui_info.signals_pane.clear()
         create_empty_signal_ui(gui_info)
+    elseif element.name == LABEL_EDIT then
+        local flow = element.parent
+        local root = flow.parent
+        local index = flow.get_index_in_parent()
+        local options = memorycard.read_options(inserted_card)
+        local text = inserted_card ~= nil and options.label or ''
+        flow.destroy()
+        gui_info.card_ui.label_layout = create_label_editor(root, index, text)
+    elseif element.name == LABEL_CANCEL then
+        local options = memorycard.read_options(inserted_card)
+        local text = inserted_card ~= nil and options.label or ''
+        recreate_label_viewer(gui_info, text)
+    elseif element.name == LABEL_APPLY then
+        local flow = element.parent
+        local options = memorycard.read_options(inserted_card)
+        options.label = utils.trim_nilable_string(flow.children[1].text)
+        memorycard.generate_description(inserted_card, nil, options)
+        recreate_label_viewer(gui_info, options.label)
+    end
+end
+
+function _M.on_gui_checked_state_changed(player_index, element)
+    local player = game.get_player(player_index)
+    if player == nil then return end
+
+    local gui_info = persistence.editor_ui(player_index)
+    if gui_info == nil or gui_info.root == nil then return end
+
+    local editor_inventory = gui_info.inserted_cards[player.force.index]
+    local inserted_card = editor_inventory ~= nil and editor_inventory[1] or nil
+    if inserted_card == nil then return end
+
+    if element.name == LIST_CONTENTS then
+        local options = memorycard.read_options(inserted_card)
+        options.list_contents = element.state
+        memorycard.generate_description(inserted_card, nil, options)
     end
 end
 

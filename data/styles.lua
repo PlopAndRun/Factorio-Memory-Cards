@@ -26,6 +26,10 @@ return {
         gui_style[styles.CARD_SLOT_ROW] = {
             type = 'horizontal_flow_style',
             vertical_align = 'center',
+        }
+
+        gui_style[styles.CARD_CONTROLS_FLOW] = {
+            type = 'vertical_flow_style',
             margin = 12,
         }
 
@@ -41,10 +45,6 @@ return {
             parent = 'green_button',
             horizontally_stretchable = 'on',
             horizontal_align = 'right',
-            left_margin = 12,
-            right_margin = 12,
-            bottom_margin = 12,
-            top_margin = -12,
             height = 32,
             font = 'default-dialog-button',
         }
@@ -80,6 +80,21 @@ return {
             type = 'button_style',
             parent = 'tool_button_red',
             right_margin = 4,
+        }
+
+        gui_style[styles.RED_BUTTON] = {
+            type = 'button_style',
+            parent = 'tool_button_red',
+        }
+
+        gui_style[styles.GREEN_BUTTON] = {
+            type = 'button_style',
+            parent = 'item_and_count_select_confirm',
+        }
+
+        gui_style[styles.INLINE_BUTTON] = {
+            type = 'button_style',
+            parent = 'mini_button_aligned_to_text_vertically',
         }
 
         gui_style[styles.EDITOR_SIGNALS_SCROLLBAR] = {

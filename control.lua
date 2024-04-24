@@ -99,11 +99,15 @@ end
 local function on_gui_click(event)
     if event.element.name:find(names.memorycard_editor.gui.PATTERN) == 1 then
         memorycard_editor.on_gui_click(event.player_index, event.element)
+    elseif event.element.name:find(names.writer.gui.PATTERN) == 1 then
+        writer_gui.on_gui_click(event.player_index, event.element)
     end
 end
 
 local function on_gui_checked_state_changed(event)
-    if event.element.name:find(names.writer.gui.PATTERN) == 1 then
+    if event.element.name:find(names.memorycard_editor.gui.PATTERN) == 1 then
+        memorycard_editor.on_gui_checked_state_changed(event.player_index, event.element)
+    elseif event.element.name:find(names.writer.gui.PATTERN) == 1 then
         writer_gui.on_gui_checked_state_changed(event.player_index, event.element)
     end
 end
