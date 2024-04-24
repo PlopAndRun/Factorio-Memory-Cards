@@ -347,6 +347,7 @@ local function create_signal_ui(gui_info, signal, network)
     signal_container.add {
         type = 'switch',
         name = SIGNAL_COLOR_SWITCH .. '-' .. tostring(#vertical_layout.children + 1),
+        tooltip = { 'memorycards-editor.editor-section-channel-switch-help' },
         allow_none_state = true,
         switch_state = network == 'red' and 'left' or network == 'green' and 'right' or 'none',
         left_label_caption = { '', '[item=red-wire]', },

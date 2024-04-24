@@ -1,3 +1,6 @@
+  Bugfixes:
+    - Fixed the channel switch in the editor not showing description on hover
+
 ---------------------------------------------------------------------------------------------------
 Version: 0.3.1
 Date: 24.04.2024
