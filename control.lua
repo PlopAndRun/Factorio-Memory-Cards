@@ -2,6 +2,7 @@ local names = require('utils').names
 local writer = require 'control.writer'
 local writer_gui = require 'control.writer_gui'
 local reader = require 'control.reader'
+local reader_gui = require 'control.reader_gui'
 local memorycard_editor = require 'control.memorycard_editor'
 local persistence = require 'persistence'
 
@@ -10,7 +11,7 @@ local function on_built(event)
     if entity.name == names.writer.BUILDING or entity.name == names.writer.SIGNAL_RECEIVER then
         writer.on_built(entity, event.tags)
     elseif entity.name == names.reader.SIGNAL_SENDER then
-        reader.on_built(entity)
+        reader.on_built(entity, event.tags)
     end
 end
 
@@ -30,6 +31,10 @@ local function on_entity_settings_pasted(event)
         and (destination.name == names.writer.BUILDING or destination.name == names.writer.SIGNAL_RECEIVER)
     then
         writer.copy_settings(source, destination)
+    elseif (source.name == names.reader.SIGNAL_SENDER or source.name == names.reader.CONTAINER)
+        and (destination.name == names.reader.SIGNAL_SENDER or destination.name == names.reader.CONTAINER)
+    then
+        reader.copy_settings(source, destination)
     end
 end
 
@@ -75,8 +80,10 @@ end
 local function on_gui_closed(event)
     local entity = event.entity
     if not entity then return end
-    if entity.name == names.writer.SIGNAL_RECEIVER or entity.name == names.writer.BUILDING then
+    if entity.name == names.writer.BUILDING then
         writer.on_gui_closed(entity, event.player_index)
+    elseif entity.name == names.reader.CONTAINER then
+        reader.on_gui_closed(entity, event.player_index)
     end
 end
 
@@ -124,6 +131,15 @@ local function on_gui_elem_changed(event)
     end
 end
 
+local function on_gui_selection_state_changed(event)
+    if event.element.name:find(names.reader.gui.PATTERN) == 1 then
+        local holder = reader_gui.on_gui_selection_state_changed(event.player_index, event.element)
+        if holder then
+            reader.apply_options(holder)
+        end
+    end
+end
+
 local function on_player_changed_force(event)
     memorycard_editor.on_player_changed_force(game.get_player(event.player_index))
 end
@@ -150,6 +166,8 @@ local function on_player_setup_blueprint(event)
         if entity.valid then
             if entity.name == names.writer.BUILDING or entity.name == names.writer.SIGNAL_RECEIVER then
                 writer.save_blueprint_data(entity, blueprint, i)
+            elseif entity.name == names.reader.CONTAINER or entity.name == names.reader.SIGNAL_SENDER then
+                reader.save_blueprint_data(entity, blueprint, i)
             end
         end
     end
@@ -177,6 +195,7 @@ script.on_event(defines.events.on_gui_click, on_gui_click)
 script.on_event(defines.events.on_gui_checked_state_changed, on_gui_checked_state_changed)
 script.on_event(defines.events.on_gui_switch_state_changed, on_gui_switch_state_changed)
 script.on_event(defines.events.on_gui_elem_changed, on_gui_elem_changed)
+script.on_event(defines.events.on_gui_selection_state_changed, on_gui_selection_state_changed)
 script.on_event(defines.events.on_player_changed_force, on_player_changed_force)
 script.on_event(defines.events.on_player_removed, on_player_removed)
 

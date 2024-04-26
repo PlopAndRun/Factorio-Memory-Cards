@@ -2,8 +2,8 @@ local persistence = require 'persistence'
 local memorycard = require 'control.memorycard'
 local utils = require 'utils'
 local gui = require 'control.writer_gui'
-local _M = {}
 local names = utils.names
+local _M = {}
 
 local USE_CHANNELS_TAG = names.MOD_PREFIX .. 'use-channels'
 

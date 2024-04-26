@@ -1,4 +1,5 @@
 local _M = {}
+local gui_utils = require 'gui_utils'
 local utils = require 'utils'
 local styles = require('utils').names.styles
 local persistence = require 'persistence'
@@ -10,20 +11,6 @@ local EDIT_LABEL_BUTTON = GUI_PREFIX .. '.edit-label'
 local LIST_CONTENTS_IN_DESCRIPTION = GUI_PREFIX .. '.list-contents'
 local USE_CHANNELS = GUI_PREFIX .. '.use-channels'
 local WINDOW = GUI_PREFIX .. '.window'
-
-local function create_titlebar(parent)
-    local titlebar = parent.add {
-        type = 'flow',
-        direction = 'horizontal',
-    }
-
-    titlebar.add {
-        type = 'label',
-        style = 'frame_title',
-        caption = { 'memorycards-writer-options.title', },
-        ignored_by_interaction = true,
-    }
-end
 
 local function create_label_viewer(parent, index, holder)
     local layout = parent.add {
@@ -94,30 +81,11 @@ local function create_label_editor(parent, index, holder)
 end
 
 function _M.open_options_gui(player, holder)
-    local gui = player.gui.relative
-
-    local anchor = {
-        gui = defines.relative_gui_type.furnace_gui,
-        position = defines.relative_gui_position.right,
-    }
-
-    local window = gui.add {
-        type = 'frame',
-        direction = 'vertical',
-        name = WINDOW,
-        anchor = anchor,
-    }
-    window.style.vertically_stretchable = 'stretch_and_expand'
-
-    create_titlebar(window)
-    local frame = window.add {
-        type = 'frame',
-        style = styles.MACHINE_OPTIONS_FRAME,
-    }
-
-    local root = frame.add {
-        type = 'flow',
-        direction = 'vertical',
+    local root = gui_utils.create_machine_options_window {
+        player = player,
+        window_name = WINDOW,
+        title = { 'memorycards-writer-options.title', },
+        anchor_gui = defines.relative_gui_type.furnace_gui,
     }
 
     root.add {
@@ -197,11 +165,7 @@ function _M.on_gui_checked_state_changed(player_index, element)
 end
 
 function _M.close_options_gui(player)
-    local gui = player.gui.relative
-    local window = gui[WINDOW]
-    if window then
-        window.destroy()
-    end
+    gui_utils.close_machine_options_window(player, WINDOW)
 end
 
 return _M

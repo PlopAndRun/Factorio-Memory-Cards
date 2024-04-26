@@ -22,7 +22,7 @@ local inventory = {
 local signal_sender = table.deepcopy(data.raw['constant-combinator']['constant-combinator'])
 
 signal_sender.type = 'constant-combinator'
-signal_sender.item_slot_count = 1
+signal_sender.item_slot_count = 0
 signal_sender.name = names.reader.SIGNAL_SENDER
 signal_sender.flags = { 'player-creation', 'not-rotatable' }
 signal_sender.is_military_target = false
@@ -44,6 +44,10 @@ combinator_cell.activity_led_sprites = nil
 combinator_cell.draw_circuit_wires = false
 combinator_cell.selectable_in_game = false
 combinator_cell.destructible = false
+
+local diagnostics_cell = table.deepcopy(combinator_cell)
+diagnostics_cell.name = names.reader.SIGNAL_DIAGNOSTICS_CELL
+diagnostics_cell.item_slot_count = 1
 
 local item = {
     type = 'item',
@@ -80,7 +84,7 @@ end
 
 return {
     register = function()
-        data:extend({ item, recipe, inventory, signal_sender, combinator_cell })
+        data:extend({ item, recipe, inventory, signal_sender, combinator_cell, diagnostics_cell })
         utils.add_recipe_to_unlocks(recipe)
     end
 }

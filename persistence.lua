@@ -1,5 +1,12 @@
 local _M = {}
 
+_M.CHANNEL_OPTION = {
+    NONE = 1,
+    RED = 2,
+    GREEN = 3,
+    BOTH = 4,
+}
+
 function _M.writers()
     return global.writers or {}
 end
@@ -57,16 +64,22 @@ function _M.copy_writer_options(source, destination)
     destination.options.list_contents = source.options.list_contents
 end
 
-function _M.register_reader(sender, reader)
+function _M.register_reader(sender, reader, diagnostics_cell)
     local holder = {
         sender = sender,
         reader = reader,
+        diagnostics_cell = diagnostics_cell,
         options = {
+            diagnostics_channel = _M.CHANNEL_OPTION.BOTH
         },
     }
     if not global.readers then global.readers = {} end
     global.readers[reader.unit_number] = holder
     return holder
+end
+
+function _M.copy_reader_options(source, destination)
+    destination.options.diagnostics_channel = source.options.diagnostics_channel
 end
 
 function _M.delete_reader(holder)

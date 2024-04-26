@@ -3,7 +3,10 @@ local memorycard = require 'control.memorycard'
 local utils = require 'utils'
 local names = utils.names
 local constants = utils.constants
+local gui = require 'control.reader_gui'
 local _M = {}
+
+local DIAGNOSTICS = names.MOD_PREFIX .. 'diagnostics-channel'
 
 local function find_chest(entity)
     return entity.surface.find_entity(names.reader.CONTAINER, entity.position)
@@ -72,8 +75,36 @@ local function destroy_cells(holder)
     holder.cells = nil
 end
 
+function _M.apply_options(holder)
+    local channel = holder.options.diagnostics_channel
+    local red = channel == persistence.CHANNEL_OPTION.RED or channel == persistence.CHANNEL_OPTION.BOTH
+    local green = channel == persistence.CHANNEL_OPTION.GREEN or channel == persistence.CHANNEL_OPTION.BOTH
+    if red then
+        holder.sender.connect_neighbour {
+            wire = defines.wire_type.red,
+            target_entity = holder.diagnostics_cell,
+        }
+    else
+        holder.sender.disconnect_neighbour {
+            wire = defines.wire_type.red,
+            target_entity = holder.diagnostics_cell,
+        }
+    end
 
-function _M.on_built(sender)
+    if green then
+        holder.sender.connect_neighbour {
+            wire = defines.wire_type.green,
+            target_entity = holder.diagnostics_cell,
+        }
+    else
+        holder.sender.disconnect_neighbour {
+            wire = defines.wire_type.green,
+            target_entity = holder.diagnostics_cell,
+        }
+    end
+end
+
+function _M.on_built(sender, tags)
     local control_behavior = sender.get_or_create_control_behavior()
     control_behavior.parameters = {}
 
@@ -85,9 +116,17 @@ function _M.on_built(sender)
         force = sender.force,
         create_build_effect_smoke = false,
     }
+    local diagnostics = surface.create_entity {
+        name = names.reader.SIGNAL_DIAGNOSTICS_CELL,
+        position = position,
+        force = sender.force,
+        create_build_effect_smoke = false,
+    }
     local inventory = reader.get_inventory(defines.inventory.chest)
     inventory.set_filter(1, names.memorycard.ITEM)
-    persistence.register_reader(sender, reader)
+    local holder = persistence.register_reader(sender, reader, diagnostics)
+    holder.options.diagnostics_channel = tags and tags[DIAGNOSTICS] or persistence.CHANNEL_OPTION.BOTH
+    _M.apply_options(holder)
 end
 
 function _M.on_cloned(source, destination)
@@ -97,11 +136,11 @@ function _M.on_cloned(source, destination)
     if holder.clones == nil then
         holder.clones = {
             total = 0,
-            required = 2,
+            required = 3,
             cells = {},
         }
         if holder.cells ~= nil then
-            holder.clones.required = 2 + #holder.cells
+            holder.clones.required = holder.clones.required + #holder.cells
         end
     end
 
@@ -112,11 +151,14 @@ function _M.on_cloned(source, destination)
     end
     holder.clones.total = holder.clones.total + 1
     if holder.clones.total == holder.clones.required then
-        local new_holder = persistence.register_reader(holder.clones[names.reader.SIGNAL_SENDER],
-            holder.clones[names.reader.CONTAINER])
+        local new_holder = persistence.register_reader(
+            holder.clones[names.reader.SIGNAL_SENDER],
+            holder.clones[names.reader.CONTAINER],
+            holder.clones[names.reader.SIGNAL_DIAGNOSTICS_CELL])
         if holder.cells ~= nil then
             new_holder.cells = holder.clones.cells
         end
+        persistence.copy_reader_options(holder, new_holder)
         holder.clones = nil
     end
 end
@@ -130,6 +172,7 @@ function _M.on_destroyed(entity, player_index, spill_inventory)
             destroy_cells(holder)
         end
         persistence.delete_reader(holder)
+        holder.diagnostics_cell.destroy()
         if player_index ~= nil then
             game.players[player_index].mine_entity(holder.reader, true)
         elseif spill_inventory then
@@ -149,13 +192,13 @@ function _M.on_tick()
         then
             if holder.cells == nil then
                 create_cells(holder, inventory[1])
-                local cb = holder.sender.get_or_create_control_behavior()
+                local cb = holder.diagnostics_cell.get_or_create_control_behavior()
                 cb.set_signal(1, { signal = { type = 'virtual', name = names.signal.INSERTED, }, count = 1, })
             end
         else
             if holder.cells ~= nil then
                 destroy_cells(holder)
-                local cb = holder.sender.get_or_create_control_behavior()
+                local cb = holder.diagnostics_cell.get_or_create_control_behavior()
                 cb.set_signal(1, nil)
             end
         end
@@ -164,9 +207,17 @@ end
 
 function _M.on_gui_opened(entity, player_index)
     local chest = find_chest(entity)
-    if chest then
+    local player = game.get_player(player_index)
+    if chest and player then
         game.get_player(player_index).opened = chest
+        gui.open_options_gui(player, persistence.readers()[chest.unit_number])
     end
+end
+
+function _M.on_gui_closed(_, player_index)
+    local player = game.get_player(player_index)
+    if not player then return end
+    gui.close_options_gui(player)
 end
 
 function _M.on_player_fast_inserted(entity, player)
@@ -179,6 +230,25 @@ function _M.on_surface_erased(surface_index)
         if holder.reader.surface_index == surface_index then
             readers[key] = nil
         end
+    end
+end
+
+function _M.save_blueprint_data(entity, blueprint, index)
+    local chest = find_chest(entity)
+    if chest == nil then return end
+    local holder = persistence.readers()[chest.unit_number]
+    if holder == nil then return end
+    blueprint.set_blueprint_entity_tag(index, DIAGNOSTICS, holder.options.diagnostics_channel)
+end
+
+function _M.copy_settings(source, destination)
+    local source_reader = find_chest(source)
+    local destination_reader = find_chest(destination)
+    local source_holder = persistence.readers()[source_reader.unit_number]
+    local destination_holder = persistence.readers()[destination_reader.unit_number]
+    if source_holder and destination_holder then
+        persistence.copy_reader_options(source_holder, destination_holder)
+        _M.apply_options(destination_holder)
     end
 end
 

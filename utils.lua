@@ -127,6 +127,12 @@ _M.names.reader.ITEM = _M.names.reader.CONTAINER
 _M.names.reader.RECIPE = _M.names.reader.CONTAINER
 _M.names.reader.SIGNAL_SENDER = _M.names.MOD_PREFIX .. 'reader-signal-sender'
 _M.names.reader.SIGNAL_SENDER_CELL = _M.names.MOD_PREFIX .. 'reader-signal-sender-cell'
+_M.names.reader.SIGNAL_DIAGNOSTICS_CELL = _M.names.MOD_PREFIX .. 'reader-signal-diagnostics-cell'
+_M.names.reader.gui = {}
+_M.names.reader.gui.NAME = _M.names.MOD_PREFIX .. 'reader-gui'
+_M.names.reader.gui.PATTERN = '^' .. _M.names.reader.gui.NAME
+    :gsub('%-', '%%-')
+    :gsub('%.', '%%.')
 
 _M.names.signal = {}
 _M.names.signal.INSERTED = _M.names.MOD_PREFIX .. 'signal-inserted'
