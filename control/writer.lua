@@ -6,6 +6,8 @@ local names = utils.names
 local _M = {}
 
 local USE_CHANNELS_TAG = names.MOD_PREFIX .. 'use-channels'
+local LABEL_TAG = names.MOD_PREFIX .. 'label'
+local LIST_CONTENTS_TAG = names.MOD_PREFIX .. 'list-contents'
 
 local function find_writer(entity)
     return entity.surface.find_entity(names.writer.BUILDING, entity.position)
@@ -51,7 +53,17 @@ function _M.on_built(entity, tags)
         }
     end
     local holder = persistence.register_writer(writer, receiver)
-    holder.options.use_channels = tags and tags[USE_CHANNELS_TAG] or false
+    if tags then
+        if tags[USE_CHANNELS_TAG] ~= nil then
+            holder.options.use_channels = tags[USE_CHANNELS_TAG]
+        end
+        if tags[LABEL_TAG] ~= nil then
+            holder.options.label = tags[LABEL_TAG]
+        end
+        if tags[LIST_CONTENTS_TAG] ~= nil then
+            holder.options.list_contents = tags[LIST_CONTENTS_TAG]
+        end
+    end
 end
 
 function _M.on_cloned(source, destination)
@@ -158,6 +170,8 @@ function _M.save_blueprint_data(entity, blueprint, index)
     local holder = persistence.writers()[writer.unit_number]
     if holder == nil then return end
     blueprint.set_blueprint_entity_tag(index, USE_CHANNELS_TAG, holder.options.use_channels)
+    blueprint.set_blueprint_entity_tag(index, LABEL_TAG, holder.options.label)
+    blueprint.set_blueprint_entity_tag(index, LIST_CONTENTS_TAG, holder.options.list_contents)
 end
 
 function _M.copy_settings(source, destination)
