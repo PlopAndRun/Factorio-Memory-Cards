@@ -125,7 +125,11 @@ function _M.on_built(sender, tags)
     local inventory = reader.get_inventory(defines.inventory.chest)
     inventory.set_filter(1, names.memorycard.ITEM)
     local holder = persistence.register_reader(sender, reader, diagnostics)
-    holder.options.diagnostics_channel = tags and tags[DIAGNOSTICS] or persistence.CHANNEL_OPTION.BOTH
+    if tags then
+        if tags[DIAGNOSTICS] ~= nil then
+            holder.options.diagnostics_channel = tags[DIAGNOSTICS]
+        end
+    end
     _M.apply_options(holder)
 end
 
