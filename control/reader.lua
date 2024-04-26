@@ -186,9 +186,7 @@ end
 function _M.on_tick()
     for _, holder in pairs(persistence.readers()) do
         local inventory = holder.reader.get_inventory(defines.inventory.chest)
-        if not inventory.is_empty()
-            and (inventory[1].name == names.memorycard.ITEM
-                or inventory[1].name == names.memorycard_with_channels.ITEM)
+        if not inventory.is_empty() and inventory[1].name == names.memorycard.ITEM
         then
             if holder.cells == nil then
                 create_cells(holder, inventory[1])

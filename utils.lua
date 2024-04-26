@@ -102,10 +102,6 @@ _M.names.memorycard = {}
 _M.names.memorycard.ITEM = _M.names.MOD_PREFIX .. 'memorycard'
 _M.names.memorycard.RECIPE = _M.names.memorycard.ITEM
 
-_M.names.memorycard_with_channels = {}
-_M.names.memorycard_with_channels.ITEM = _M.names.MOD_PREFIX .. 'memorycard-with-channels'
-_M.names.memorycard_with_channels.RECIPE = _M.names.memorycard_with_channels.ITEM
-
 _M.names.writer = {}
 _M.names.writer.WRITE_RECIPE = _M.names.MOD_PREFIX .. 'write-recipe'
 _M.names.writer.WRITE_CHANNELS_RECIPE = _M.names.MOD_PREFIX .. 'write-channels-recipe'
