@@ -19,7 +19,11 @@ local function on_cloned(event)
     local source = event.source
     if source.name == names.writer.BUILDING or source.name == names.writer.SIGNAL_RECEIVER then
         writer.on_cloned(source, event.destination)
-    elseif source.name == names.reader.SIGNAL_SENDER or source.name == names.reader.CONTAINER or source.name == names.reader.SIGNAL_SENDER_CELL then
+    elseif source.name == names.reader.SIGNAL_SENDER
+        or source.name == names.reader.CONTAINER
+        or source.name == names.reader.SIGNAL_SENDER_CELL
+        or source.name == names.reader.SIGNAL_DIAGNOSTICS_CELL
+    then
         reader.on_cloned(source, event.destination)
     end
 end
