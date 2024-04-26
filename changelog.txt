@@ -2,7 +2,7 @@
     - Added ability to add custom labels to memory cards' descriptions
     - Added an option to not list signals in memory cards' descriptions
   Bugfixes:
-   - Fixed the channel switch in the editor not showing description on hover
+    - Fixed the channel switch in the editor not showing description on hover
 
 ---------------------------------------------------------------------------------------------------
 Version: 0.3.1
