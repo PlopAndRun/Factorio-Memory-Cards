@@ -670,7 +670,10 @@ function _M.on_gui_click(player_index, element)
         end
     elseif element.name == WRITE_BUTTON then
         if inserted_card ~= nil then
-            memorycard.save_data(inserted_card, create_signals(gui_info.signals_pane), {})
+            memorycard.save_data(
+                inserted_card,
+                create_signals(gui_info.signals_pane),
+                memorycard.read_options(inserted_card))
             update_card_ui(gui_info, player)
         end
     elseif element.name == MEMORYCARD_SLOT then
