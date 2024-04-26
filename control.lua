@@ -84,9 +84,9 @@ end
 local function on_gui_closed(event)
     local entity = event.entity
     if not entity then return end
-    if entity.name == names.writer.BUILDING then
+    if entity.name == names.writer.BUILDING or entity.name == names.writer.SIGNAL_RECEIVER then
         writer.on_gui_closed(entity, event.player_index)
-    elseif entity.name == names.reader.CONTAINER then
+    elseif entity.name == names.reader.CONTAINER or entity.name == names.reader.SIGNAL_SENDER then
         reader.on_gui_closed(entity, event.player_index)
     end
 end
