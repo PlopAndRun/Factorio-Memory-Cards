@@ -29,8 +29,6 @@ signal_sender.is_military_target = false
 signal_sender.localised_name = inventory.localised_name
 signal_sender.localised_description = inventory.localised_description
 signal_sender.sprites = graphics.reader_entity.idle
-signal_sender.activity_led_sprites = graphics.reader_entity.active
-signal_sender.activity_led_light_offsets = { { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } }
 signal_sender.selection_priority = 40
 signal_sender.items_to_place_this = { names.reader.ITEM }
 signal_sender.minable.result = names.reader.ITEM
@@ -48,6 +46,8 @@ combinator_cell.destructible = false
 local diagnostics_cell = table.deepcopy(combinator_cell)
 diagnostics_cell.name = names.reader.SIGNAL_DIAGNOSTICS_CELL
 diagnostics_cell.item_slot_count = 1
+diagnostics_cell.activity_led_sprites = graphics.reader_entity.active
+diagnostics_cell.activity_led_light_offsets = { { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } }
 
 local item = {
     type = 'item',
