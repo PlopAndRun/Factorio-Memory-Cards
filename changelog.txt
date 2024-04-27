@@ -4,7 +4,7 @@ Date: 27.04.2024
   Features:
     - Added ability to add custom labels to memory cards' descriptions
     - Added an option to not list signals in memory cards' descriptions
-	- Added an option to select a channel where the reader outputs its inserted signal
+    - Added an option to select a channel where the reader outputs its inserted signal
   Bugfixes:
     - Fixed the channel switch in the editor not showing description on hover
 
