@@ -91,8 +91,10 @@ function _M.on_destroyed(entity, player_index, spill_inventory)
     local holder = persistence.writers()[writer.unit_number]
     if holder then
         persistence.delete_writer(holder)
+
         if player_index ~= nil then
             game.players[player_index].mine_entity(holder.writer, true)
+            game.players[player_index].mine_entity(holder.receiver, true)
         elseif spill_inventory then
             utils.spill_items(surface, entity.position, entity.force,
                 holder.writer.get_inventory(defines.inventory.furnace_source))
@@ -104,8 +106,9 @@ function _M.on_destroyed(entity, player_index, spill_inventory)
                 utils.spill_items(surface, entity.position, entity.force, temp_inventory)
                 temp_inventory.destroy()
             end
-            holder.writer.destroy()
         end
+        holder.writer.destroy()
+        holder.receiver.destroy()
     end
 end
 

@@ -172,18 +172,23 @@ function _M.on_destroyed(entity, player_index, spill_inventory)
     if reader == nil then return end
     local holder = persistence.readers()[reader.unit_number]
     if holder then
-        if holder.cells ~= nil then
-            destroy_cells(holder)
-        end
         persistence.delete_reader(holder)
-        holder.diagnostics_cell.destroy()
+
         if player_index ~= nil then
             game.players[player_index].mine_entity(holder.reader, true)
+            game.players[player_index].mine_entity(holder.sender, true)
         elseif spill_inventory then
             local inventory = holder.reader.get_inventory(defines.inventory.chest)
             utils.spill_items(entity.surface, entity.position, entity.force, inventory)
             holder.reader.destroy()
         end
+
+        if holder.cells ~= nil then
+            destroy_cells(holder)
+        end
+        holder.diagnostics_cell.destroy()
+        holder.reader.destroy()
+        holder.sender.destroy()
     end
 end
 
