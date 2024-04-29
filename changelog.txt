@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.3.3
+Date: 30.04.2024
+  Compatibility:
+    - Added compatibility with Blueprint Sandboxes
+  Bugfixes:
+    - Fixed a crash when a writer writes a card with separate channels
+
+---------------------------------------------------------------------------------------------------
 Version: 0.3.2
 Date: 27.04.2024
   Features:
