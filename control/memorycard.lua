@@ -134,7 +134,6 @@ function _M.save_data(memorycard, signals, options)
     end
 
     if signals.red and #signals.red > 0 then
-        memorycard.set_tag(SIGNALS, convert_signals(signals.combined))
         memorycard.set_tag(RED_SIGNALS, convert_signals(signals.red))
     else
         memorycard.remove_tag(RED_SIGNALS)
