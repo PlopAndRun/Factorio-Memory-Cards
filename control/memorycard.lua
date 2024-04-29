@@ -146,6 +146,9 @@ function _M.save_data(memorycard, signals, options)
         memorycard.remove_tag(GREEN_SIGNALS)
     end
 
+    signals.combined = signals.combined or {}
+    signals.red = signals.red or {}
+    signals.green = signals.green or {}
     _M.generate_description(memorycard, signals, options)
 end
 
