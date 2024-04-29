@@ -5,7 +5,7 @@ This mod adds a new item that can store circuit network information. This opens 
 * Enough space to store every signal in the network
 * Works in space and spaceships in Space Exploration
 * Compatible with Ultracube
-* Blueprints support
+* Full blueprints support
 * Custom card descriptions
 
 ## New Content
@@ -23,6 +23,3 @@ You can view and edit memory cards manually with a helpful editor that can be op
 
 ## Channel support
 Writers and the editor have an option to write data to separate channels on the memory card. By default this option is disabled, but to enable it you can open the writer's UI and check the checkbox 'Write channels separately'. The editor has a switch near each signal that selects the signal's color. Colorless signals will be read into both channels.
-
-## Known issues
-* Currently, pasting in Blueprint Sandboxes is not supported, but blueprints made in blueprint sandboxes manually will work in the real world.
