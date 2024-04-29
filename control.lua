@@ -5,6 +5,7 @@ local reader = require 'control.reader'
 local reader_gui = require 'control.reader_gui'
 local memorycard_editor = require 'control.memorycard_editor'
 local persistence = require 'persistence'
+local cmds = require 'commands'
 
 local function on_built(event)
     local entity = event.created_entity or event.entity
@@ -206,3 +207,5 @@ script.on_event(defines.events.on_player_changed_force, on_player_changed_force)
 script.on_event(defines.events.on_player_removed, on_player_removed)
 
 script.on_event(defines.events.on_player_setup_blueprint, on_player_setup_blueprint)
+
+commands.add_command('memorycards-healthcheck', { 'memorycards-commands.healthcheck-description', }, cmds.healthcheck)
