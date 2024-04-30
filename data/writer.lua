@@ -36,7 +36,7 @@ local building = {
     crafting_categories = { writing_recipe_category.name },
     show_recipe_icon = false,
     energy_source = { type = 'electric', usage_priority = 'secondary-input' },
-    allowed_effects = 'speed',
+    allowed_effects = { 'speed' },
     always_draw_idle_animation = true,
     idle_animation = graphics.writer_entity.idle_animation,
     working_visualisations = { {
@@ -58,6 +58,7 @@ local building = {
     selection_priority = 0,
     source_inventory_size = 1,
     result_inventory_size = 1,
+    se_allow_in_space = true,
 }
 
 local item = {
@@ -118,6 +119,7 @@ local signal_receiver = {
     selectable_in_game = true,
     selection_box = { { -0.5, -1 }, { 0.5, 1 } },
     placeable_by = { item = names.writer.ITEM, count = 1 },
+    se_allow_in_space = true,
 }
 
 local animation = table.deepcopy(graphics.writer_entity.ready_animation)

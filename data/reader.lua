@@ -17,6 +17,7 @@ local inventory = {
     selection_box = { { 0.5, 0.5 }, { 0.5, 0.5 } },
     minable = { mining_time = 0.5 },
     inventory_type = "with_filters_and_bar",
+    se_allow_in_space = true,
 }
 
 local signal_sender = table.deepcopy(data.raw['constant-combinator']['constant-combinator'])
@@ -32,6 +33,7 @@ signal_sender.sprites = graphics.reader_entity.idle
 signal_sender.selection_priority = 40
 signal_sender.items_to_place_this = { names.reader.ITEM }
 signal_sender.minable.result = names.reader.ITEM
+signal_sender.se_allow_in_space = true
 
 local combinator_cell = table.deepcopy(data.raw['constant-combinator']['constant-combinator'])
 combinator_cell.name = names.reader.SIGNAL_SENDER_CELL
@@ -42,12 +44,14 @@ combinator_cell.activity_led_sprites = nil
 combinator_cell.draw_circuit_wires = false
 combinator_cell.selectable_in_game = false
 combinator_cell.destructible = false
+combinator_cell.se_allow_in_space = true
 
 local diagnostics_cell = table.deepcopy(combinator_cell)
 diagnostics_cell.name = names.reader.SIGNAL_DIAGNOSTICS_CELL
 diagnostics_cell.item_slot_count = 1
 diagnostics_cell.activity_led_sprites = graphics.reader_entity.active
 diagnostics_cell.activity_led_light_offsets = { { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } }
+diagnostics_cell.se_allow_in_space = true
 
 local item = {
     type = 'item',
