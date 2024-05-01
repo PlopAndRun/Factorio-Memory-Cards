@@ -1,5 +1,7 @@
-Bugfixes:
+  Bugfixes:
 	- Fixed a crash when a spaceship floor is built under an existing reader or writer
+  Features:
+    - Added speed module slot to writers
 
 ---------------------------------------------------------------------------------------------------
 Version: 0.3.3

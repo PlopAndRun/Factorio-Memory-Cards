@@ -36,7 +36,7 @@ local building = {
     crafting_categories = { writing_recipe_category.name },
     show_recipe_icon = false,
     energy_source = { type = 'electric', usage_priority = 'secondary-input' },
-    allowed_effects = { 'speed' },
+    allowed_effects = { 'speed', 'consumption', 'pollution' },
     always_draw_idle_animation = true,
     idle_animation = graphics.writer_entity.idle_animation,
     working_visualisations = { {
@@ -47,7 +47,7 @@ local building = {
     minable = { mining_time = 0.5 },
     match_animation_speed_to_activity = false,
     show_recipe_icon_on_map = false,
-    module_specifications = { module_slots = 1 },
+    module_specification = { module_slots = 1 },
     icons = { graphics.writer_item },
     collision_box = { { -0.4, -0.9 }, { 0.4, 0.9 } },
     collision_mask = { 'item-layer', 'object-layer', 'player-layer', 'water-tile' },

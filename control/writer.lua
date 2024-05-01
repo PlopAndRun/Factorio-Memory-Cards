@@ -100,6 +100,8 @@ function _M.on_destroyed(entity, player_index, spill_inventory)
                 holder.writer.get_inventory(defines.inventory.furnace_source))
             utils.spill_items(surface, entity.position, entity.force,
                 holder.writer.get_inventory(defines.inventory.furnace_result))
+            utils.spill_items(surface, entity.position, entity.force,
+                holder.writer.get_inventory(defines.inventory.furnace_modules))
             if holder.writer.is_crafting() then
                 local temp_inventory = game.create_inventory(1)
                 temp_inventory.insert { name = names.memorycard.ITEM, count = 1, }
