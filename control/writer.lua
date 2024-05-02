@@ -89,6 +89,7 @@ function _M.on_destroyed(entity, player_index, spill_inventory)
     local writer = find_writer(entity)
     if writer == nil then return end
     local holder = persistence.writers()[writer.unit_number]
+    local unit_number = entity.unit_number
     if holder then
         persistence.delete_writer(holder)
 
@@ -109,8 +110,13 @@ function _M.on_destroyed(entity, player_index, spill_inventory)
                 temp_inventory.destroy()
             end
         end
-        holder.writer.destroy()
-        holder.receiver.destroy()
+
+        if holder.writer.valid and holder.writer.unit_number ~= unit_number then
+            holder.writer.destroy()
+        end
+        if holder.receiver.valid and holder.receiver.unit_number ~= unit_number then
+            holder.receiver.destroy()
+        end
     end
 end
 

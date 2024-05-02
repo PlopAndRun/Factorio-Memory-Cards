@@ -171,6 +171,7 @@ function _M.on_destroyed(entity, player_index, spill_inventory)
     local reader = entity.surface.find_entity(names.reader.CONTAINER, entity.position)
     if reader == nil then return end
     local holder = persistence.readers()[reader.unit_number]
+    local unit_number = entity.unit_number
     if holder then
         persistence.delete_reader(holder)
 
@@ -180,15 +181,18 @@ function _M.on_destroyed(entity, player_index, spill_inventory)
         elseif spill_inventory then
             local inventory = holder.reader.get_inventory(defines.inventory.chest)
             utils.spill_items(entity.surface, entity.position, entity.force, inventory)
-            holder.reader.destroy()
         end
 
         if holder.cells ~= nil then
             destroy_cells(holder)
         end
         holder.diagnostics_cell.destroy()
-        holder.reader.destroy()
-        holder.sender.destroy()
+        if holder.reader.valid and unit_number ~= holder.reader.unit_number then
+            holder.reader.destroy()
+        end
+        if holder.sender.valid and unit_number ~= holder.sender.unit_number then
+            holder.sender.destroy()
+        end
     end
 end
 
