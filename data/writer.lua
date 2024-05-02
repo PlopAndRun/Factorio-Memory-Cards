@@ -47,7 +47,6 @@ local building = {
     minable = { mining_time = 0.5 },
     match_animation_speed_to_activity = false,
     show_recipe_icon_on_map = false,
-    module_specification = { module_slots = 1 },
     icons = { graphics.writer_item },
     collision_box = { { -0.4, -0.9 }, { 0.4, 0.9 } },
     collision_mask = { 'item-layer', 'object-layer', 'player-layer', 'water-tile' },
