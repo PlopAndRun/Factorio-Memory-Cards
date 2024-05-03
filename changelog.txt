@@ -1,8 +1,11 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.3.4
+Date: 03.05.2024
   Bugfixes:
-	- Fixed a crash when a spaceship floor is built under an existing reader or writer
-	- Fixed pasting blueprints over existing entities
+    - Fixed a crash when a spaceship floor is built under an existing reader or writer
+    - Fixed pasting blueprints over existing entities
   Features:
-    - Added speed module slot to writers
+    - Added speed beacon support
 
 ---------------------------------------------------------------------------------------------------
 Version: 0.3.3
