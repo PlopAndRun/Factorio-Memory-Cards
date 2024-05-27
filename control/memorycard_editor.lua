@@ -65,10 +65,11 @@ local function create_label_viewer(parent, index, label)
             tooltip = { 'memorycards-writer-options.custom-label-tooltip', },
         }
 
-        layout.add {
+        local caption_label = layout.add {
             type = 'label',
             caption = label,
         }
+        caption_label.style.maximal_width = 180
     else
         layout.add {
             type = 'label',
