@@ -167,6 +167,10 @@ local function on_player_setup_blueprint(event)
         return
     end
 
+    if not next(blueprint.cost_to_build) then
+        return
+    end
+
     local mapping = event.mapping.get()
     for i, entity in pairs(mapping) do
         if entity.valid then
