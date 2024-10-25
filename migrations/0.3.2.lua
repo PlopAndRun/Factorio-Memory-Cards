@@ -1,5 +1,5 @@
 local function add_options_to_writers()
-    local writers = global.writers
+    local writers = storage.writers
     if writers == nil then return end
     for _, writer in pairs(writers) do
         writer.options.list_contents = true
@@ -7,7 +7,7 @@ local function add_options_to_writers()
 end
 
 local function update_readers()
-    local holders = global.readers
+    local holders = storage.readers
     if holders == nil then return end
     for _, holder in pairs(holders) do
         holder.options = {
@@ -49,7 +49,7 @@ local function update_readers()
 end
 
 local function close_memorycards_gui()
-    local players = global.players
+    local players = storage.players
     if players == nil then return end
     for _, player in pairs(players) do
         local gui_info = player.editor_ui

@@ -2,6 +2,7 @@ local names = (require 'utils').names
 
 local _M = {}
 
+local WRITTEN = names.MOD_PREFIX .. 'written'
 local SIGNALS = names.MOD_PREFIX .. 'signals'
 local RED_SIGNALS = names.MOD_PREFIX .. 'red-signals'
 local GREEN_SIGNALS = names.MOD_PREFIX .. 'green-signals'
@@ -84,7 +85,6 @@ local function convert_signals(signals)
     local result = {}
     for i = 1, #signals do
         table.insert(result, {
-            index = i,
             signal = signals[i].signal,
             count = signals[i].count,
         })
@@ -93,7 +93,7 @@ local function convert_signals(signals)
 end
 
 function _M.unwritten(memorycard)
-    return memorycard.get_tag(SIGNALS) == nil
+    return memorycard.get_tag(WRITTEN) ~= true
 end
 
 function _M.generate_description(memorycard, signals, options)
@@ -127,6 +127,7 @@ function _M.generate_description(memorycard, signals, options)
 end
 
 function _M.save_data(memorycard, signals, options)
+    memorycard.set_tag(WRITTEN, true)
     if signals.combined and #signals.combined > 0 then
         memorycard.set_tag(SIGNALS, convert_signals(signals.combined))
     else

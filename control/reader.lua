@@ -2,7 +2,6 @@ local persistence = require 'persistence'
 local memorycard = require 'control.memorycard'
 local utils = require 'utils'
 local names = utils.names
-local constants = utils.constants
 local gui = require 'control.reader_gui'
 local _M = {}
 
@@ -12,44 +11,53 @@ local function find_chest(entity)
     return entity.surface.find_entity(names.reader.CONTAINER, entity.position)
 end
 
+local function connect(entity, wire, target)
+    local connector = entity.get_wire_connector(wire, true)
+    connector.connect_to(target.get_wire_connector(wire, true), false)
+end
+
+local function disconnect(entity, wire, target)
+    local connector = entity.get_wire_connector(wire, true)
+    connector.disconnect_from(target.get_wire_connector(wire, true))
+end
+
 local function create_cells_for_channel(cells, holder, data, connect_red, connect_green)
     local surface = holder.reader.surface
-    local cell = nil
-    local cell_control_behavior = nil
-    local index = constants.READER_SLOTS
-    for _, v in pairs(data) do
-        if index == constants.READER_SLOTS then
-            index = 0
-            cell = surface.create_entity {
-                name = names.reader.SIGNAL_SENDER_CELL,
-                position = {
-                    x = holder.sender.position.x,
-                    y = holder.sender.position.y,
-                },
-                force = holder.sender.force,
-                create_build_effect_smoke = false,
+    local cell = surface.create_entity {
+        name = names.reader.SIGNAL_SENDER_CELL,
+        position = {
+            x = holder.sender.position.x,
+            y = holder.sender.position.y,
+        },
+        force = holder.sender.force,
+        create_build_effect_smoke = false,
 
-            }
-            cell.destructible = false;
-            table.insert(cells, cell)
-            if connect_red then
-                holder.sender.connect_neighbour {
-                    wire = defines.wire_type.red,
-                    target_entity = cell,
-                }
-            end
-            if connect_green then
-                holder.sender.connect_neighbour {
-                    wire = defines.wire_type.green,
-                    target_entity = cell,
-                }
-            end
-            cell_control_behavior = cell.get_or_create_control_behavior()
-        end
-        index = index + 1
-        assert(cell_control_behavior)
-        cell_control_behavior.set_signal(index, v)
+    }
+    table.insert(cells, cell)
+
+    if connect_red then
+        connect(holder.sender, defines.wire_connector_id.circuit_red, cell);
     end
+    if connect_green then
+        connect(holder.sender, defines.wire_connector_id.circuit_green, cell);
+    end
+
+    local cb = cell.get_or_create_control_behavior()
+    local section = cb.get_section(1)
+    local filters = {}
+    for i, value in pairs(data) do
+        filters[i] = {
+            value = {
+                type = value.signal.type or 'item',
+                name = value.signal.name,
+                quality = 'normal',
+                comparator = '=',
+            },
+            min = value.count,
+        }
+    end
+    section.filters = filters
+
     return cells
 end
 
@@ -80,34 +88,19 @@ function _M.apply_options(holder)
     local red = channel == persistence.CHANNEL_OPTION.RED or channel == persistence.CHANNEL_OPTION.BOTH
     local green = channel == persistence.CHANNEL_OPTION.GREEN or channel == persistence.CHANNEL_OPTION.BOTH
     if red then
-        holder.sender.connect_neighbour {
-            wire = defines.wire_type.red,
-            target_entity = holder.diagnostics_cell,
-        }
+        connect(holder.sender, defines.wire_connector_id.circuit_red, holder.diagnostics_cell)
     else
-        holder.sender.disconnect_neighbour {
-            wire = defines.wire_type.red,
-            target_entity = holder.diagnostics_cell,
-        }
+        disconnect(holder.sender, defines.wire_connector_id.circuit_red, holder.diagnostics_cell)
     end
 
     if green then
-        holder.sender.connect_neighbour {
-            wire = defines.wire_type.green,
-            target_entity = holder.diagnostics_cell,
-        }
+        connect(holder.sender, defines.wire_connector_id.circuit_green, holder.diagnostics_cell)
     else
-        holder.sender.disconnect_neighbour {
-            wire = defines.wire_type.green,
-            target_entity = holder.diagnostics_cell,
-        }
+        disconnect(holder.sender, defines.wire_connector_id.circuit_green, holder.diagnostics_cell)
     end
 end
 
 function _M.on_built(sender, tags)
-    local control_behavior = sender.get_or_create_control_behavior()
-    control_behavior.parameters = {}
-
     local surface = sender.surface
     local position = sender.position
     local reader = surface.create_entity {
@@ -122,6 +115,20 @@ function _M.on_built(sender, tags)
         force = sender.force,
         create_build_effect_smoke = false,
     }
+
+    local cb = diagnostics.get_or_create_control_behavior()
+    cb.enabled = false
+    local section = cb.get_section(1)
+    section.filters = { {
+        value = {
+            type = 'virtual',
+            name = names.signal.INSERTED,
+            quality = 'normal',
+            comparator = '=',
+        },
+        min = 1,
+    }, }
+
     local inventory = reader.get_inventory(defines.inventory.chest)
     inventory.set_filter(1, names.memorycard.ITEM)
     local holder = persistence.register_reader(sender, reader, diagnostics)
@@ -204,13 +211,13 @@ function _M.on_tick()
             if holder.cells == nil then
                 create_cells(holder, inventory[1])
                 local cb = holder.diagnostics_cell.get_or_create_control_behavior()
-                cb.set_signal(1, { signal = { type = 'virtual', name = names.signal.INSERTED, }, count = 1, })
+                cb.enabled = true;
             end
         else
             if holder.cells ~= nil then
                 destroy_cells(holder)
                 local cb = holder.diagnostics_cell.get_or_create_control_behavior()
-                cb.set_signal(1, nil)
+                cb.enabled = false;
             end
         end
     end

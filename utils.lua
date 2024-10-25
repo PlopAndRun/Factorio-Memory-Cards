@@ -50,12 +50,10 @@ function _M.trim_nilable_string(str)
 end
 
 _M.constants = {
-    READER_SLOTS = 20,
     HIDDEN_ENTITY_FLAGS = { 'placeable-off-grid',
         'not-on-map',
         'not-deconstructable',
         'not-blueprintable',
-        'hidden',
         'hide-alt-info',
         'not-flammable',
         'no-copy-paste',
@@ -105,8 +103,9 @@ _M.names.memorycard.RECIPE = _M.names.memorycard.ITEM
 _M.names.writer = {}
 _M.names.writer.WRITE_RECIPE = _M.names.MOD_PREFIX .. 'write-recipe'
 _M.names.writer.WRITE_CHANNELS_RECIPE = _M.names.MOD_PREFIX .. 'write-channels-recipe'
-_M.names.writer.BUILDING = _M.names.MOD_PREFIX .. 'writer'
-_M.names.writer.ITEM = _M.names.writer.BUILDING
+_M.names.writer.LEGACY_BUILDING = _M.names.MOD_PREFIX .. 'writer'
+_M.names.writer.BUILDING = _M.names.MOD_PREFIX .. 'writer-machine'
+_M.names.writer.ITEM = _M.names.MOD_PREFIX .. 'writer'
 _M.names.writer.RECIPE = _M.names.writer.ITEM
 _M.names.writer.RECIPE_CATEGORY = _M.names.MOD_PREFIX .. 'write-recipe-category'
 _M.names.writer.SIGNAL_RECEIVER = _M.names.MOD_PREFIX .. 'writer-signal-receiver'

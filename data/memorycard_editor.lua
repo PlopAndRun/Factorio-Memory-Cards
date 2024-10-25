@@ -6,8 +6,10 @@ local shortcut = {
     action = 'lua',
     name = names.memorycard_editor.SHORTCUT,
     localised_name = { 'memorycards-editor.name', },
-    icon = graphics.editor_shortcut.normal,
-    small_icon = graphics.editor_shortcut.small,
+    icon = graphics.editor_shortcut.normal.filename,
+    icon_size = graphics.editor_shortcut.normal.size,
+    small_icon = graphics.editor_shortcut.small.filename,
+    small_icon_size = graphics.editor_shortcut.small.size,
     disabled_small_icon = graphics.editor_shortcut.disabled_small,
 }
 

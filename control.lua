@@ -9,7 +9,7 @@ local cmds = require 'commands'
 
 local function on_built(event)
     local entity = event.created_entity or event.entity
-    if entity.name == names.writer.BUILDING or entity.name == names.writer.SIGNAL_RECEIVER then
+    if entity.name == names.writer.BUILDING then
         writer.on_built(entity, event.tags)
     elseif entity.name == names.reader.SIGNAL_SENDER then
         reader.on_built(entity, event.tags)
@@ -47,7 +47,7 @@ local function on_destroyed(event)
     local entity = event.entity
     if not entity then return end
     if entity.name == names.writer.BUILDING or entity.name == names.writer.SIGNAL_RECEIVER then
-        writer.on_destroyed(entity, event.player_index, true)
+        writer.on_destroyed(entity)
     elseif entity.name == names.reader.SIGNAL_SENDER or entity.name == names.reader.CONTAINER then
         reader.on_destroyed(entity, event.player_index, true)
     end
@@ -57,7 +57,7 @@ local function on_destroyed_from_script(event)
     -- Don't spill inventory when destroyed by another mod to avoid duplicating items when the destruction is a part of a clone operation
     local entity = event.entity
     if entity.name == names.writer.BUILDING or entity.name == names.writer.SIGNAL_RECEIVER then
-        writer.on_destroyed(entity, event.player_index, false)
+        writer.on_destroyed(entity)
     elseif entity.name == names.reader.SIGNAL_SENDER or entity.name == names.reader.CONTAINER then
         reader.on_destroyed(entity, event.player_index, false)
     end
@@ -78,7 +78,7 @@ local function on_gui_opened(event)
     if not entity then return end
     if entity.name == names.reader.SIGNAL_SENDER then
         reader.on_gui_opened(entity, event.player_index)
-    elseif entity.name == names.writer.SIGNAL_RECEIVER then
+    elseif entity.name == names.writer.BUILDING then
         writer.on_gui_opened(entity, event.player_index)
     end
 end
@@ -99,8 +99,6 @@ local function on_player_fast_transferred(event)
     if not event.from_player then return end -- an attempt to transfer from a lamp does not trigger an event
     if entity.name == names.reader.SIGNAL_SENDER then
         reader.on_player_fast_inserted(entity, game.get_player(event.player_index))
-    elseif entity.name == names.writer.SIGNAL_RECEIVER then
-        writer.on_player_fast_inserted(entity, game.get_player(event.player_index))
     end
 end
 local function on_lua_shortcut(event)
@@ -156,18 +154,9 @@ end
 
 
 local function on_player_setup_blueprint(event)
-    local player = game.players[event.player_index]
-    local blueprint = player.cursor_stack
+    local blueprint = event.stack
 
     if not blueprint or not blueprint.valid_for_read then
-        blueprint = player.blueprint_to_setup
-    end
-
-    if not blueprint or not blueprint.valid_for_read then
-        return
-    end
-
-    if not next(blueprint.cost_to_build) then
         return
     end
 
@@ -194,7 +183,6 @@ script.on_event(defines.events.on_pre_surface_deleted, on_surface_erased)
 script.on_event(defines.events.on_pre_player_mined_item, on_destroyed)
 script.on_event(defines.events.on_robot_pre_mined, on_destroyed)
 script.on_event(defines.events.on_entity_died, on_destroyed)
-script.on_event(defines.events.on_entity_destroyed, on_destroyed)
 script.on_event(defines.events.script_raised_destroy, on_destroyed_from_script)
 
 script.on_event(defines.events.on_tick, on_tick)

@@ -45,7 +45,7 @@ local function create_label_viewer(parent, index, holder)
         name = EDIT_LABEL_BUTTON,
         type = 'sprite-button',
         style = styles.INLINE_BUTTON,
-        sprite = 'utility/rename_icon_small_black',
+        sprite = 'utility/rename_icon',
         tooltip = { 'memorycards-writer-options.custom-label-edit-button-tooltip', },
     }
 end
@@ -76,7 +76,7 @@ local function create_label_editor(parent, index, holder)
         name = CANCEL,
         type = 'sprite-button',
         style = styles.RED_BUTTON,
-        sprite = 'utility/close_white',
+        sprite = 'utility/close',
     }
 end
 
@@ -85,7 +85,7 @@ function _M.open_options_gui(player, holder)
         player = player,
         window_name = WINDOW,
         title = { 'memorycards-writer-options.title', },
-        anchor_gui = defines.relative_gui_type.furnace_gui,
+        anchor_gui = defines.relative_gui_type.assembling_machine_gui,
     }
 
     root.add {

@@ -14,17 +14,17 @@ local inventory = {
     enable_inventory_bar = false,
     flags = constants.HIDDEN_ENTITY_FLAGS,
     destructible = false,
-    selection_box = { { 0.5, 0.5, }, { 0.5, 0.5, }, },
+    selection_box = { { -0.5, -0.5, }, { 0.5, 0.5, }, },
+    selectable_in_game = false,
     minable = { mining_time = data.raw['constant-combinator']['constant-combinator'].minable.mining_time, },
     inventory_type = 'with_filters_and_bar',
     se_allow_in_space = true,
-    collision_mask = {},
+    collision_mask = { layers = {}, },
 }
 
 local signal_sender = table.deepcopy(data.raw['constant-combinator']['constant-combinator'])
 
 signal_sender.type = 'constant-combinator'
-signal_sender.item_slot_count = 0
 signal_sender.name = names.reader.SIGNAL_SENDER
 signal_sender.flags = { 'player-creation', 'not-rotatable', }
 signal_sender.is_military_target = false
@@ -32,25 +32,21 @@ signal_sender.localised_name = inventory.localised_name
 signal_sender.localised_description = inventory.localised_description
 signal_sender.sprites = graphics.reader_entity.idle
 signal_sender.selection_priority = 40
-signal_sender.items_to_place_this = { names.reader.ITEM, }
 signal_sender.minable.result = names.reader.ITEM
 signal_sender.se_allow_in_space = true
 
 local combinator_cell = table.deepcopy(data.raw['constant-combinator']['constant-combinator'])
 combinator_cell.name = names.reader.SIGNAL_SENDER_CELL
-combinator_cell.item_slot_count = constants.READER_SLOTS
 combinator_cell.flags = constants.HIDDEN_ENTITY_FLAGS
 combinator_cell.sprites = nil
 combinator_cell.activity_led_sprites = nil
 combinator_cell.draw_circuit_wires = false
 combinator_cell.selectable_in_game = false
-combinator_cell.destructible = false
 combinator_cell.se_allow_in_space = true
-combinator_cell.collision_mask = {}
+combinator_cell.collision_mask = { layers = {}, }
 
 local diagnostics_cell = table.deepcopy(combinator_cell)
 diagnostics_cell.name = names.reader.SIGNAL_DIAGNOSTICS_CELL
-diagnostics_cell.item_slot_count = 1
 diagnostics_cell.activity_led_sprites = graphics.reader_entity.active
 diagnostics_cell.activity_led_light_offsets = { { 0, 0, }, { 0, 0, }, { 0, 0, }, { 0, 0, }, }
 diagnostics_cell.se_allow_in_space = true
@@ -72,17 +68,17 @@ local recipe = {
     icon = item.icon,
     icon_size = item.icon_size,
     ingredients = {
-        { 'decider-combinator',    1, },
-        { 'arithmetic-combinator', 1, },
+        { type = 'item', name = 'decider-combinator',    amount = 1, },
+        { type = 'item', name = 'arithmetic-combinator', amount = 1, },
     },
-    result = item.name,
+    results = { { type = 'item', name = item.name, amount = 1, }, },
     energy_required = 1,
     enabled = false,
     order = 'c[combinators]-m[memorycard-reader]',
 }
 
 if other_mods.ULTRACUBE then
-    table.insert(recipe.ingredients, 1, { 'cube-basic-matter-unit', 1, })
+    table.insert(recipe.ingredients, 1, { type = 'item', name = 'cube-basic-matter-unit', amount = 1, })
     recipe.order = 'cube-' .. recipe.order
     recipe.category = 'cube-fabricator-handcraft'
     item.subgroup = 'cube-combinator-extra'

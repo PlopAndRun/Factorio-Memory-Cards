@@ -28,7 +28,7 @@ function _M.create_machine_options_window(options)
         name = options.window_name,
         anchor = anchor,
     }
-    window.style.vertically_stretchable = 'stretch_and_expand'
+    window.style.vertically_stretchable = true
     create_titlebar(window, options.title)
     local frame = window.add {
         type = 'frame',

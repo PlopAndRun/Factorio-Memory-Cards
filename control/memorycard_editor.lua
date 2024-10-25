@@ -83,7 +83,7 @@ local function create_label_viewer(parent, index, label)
         name = LABEL_EDIT,
         type = 'sprite-button',
         style = styles.INLINE_BUTTON,
-        sprite = 'utility/rename_icon_small_black',
+        sprite = 'utility/rename_icon',
         tooltip = { 'memorycards-writer-options.custom-label-edit-button-tooltip', },
     }
 
@@ -123,7 +123,7 @@ local function create_label_editor(parent, index, label)
         name = LABEL_CANCEL,
         type = 'sprite-button',
         style = styles.RED_BUTTON,
-        sprite = 'utility/close_white',
+        sprite = 'utility/close',
     }
 
     return layout
@@ -153,7 +153,7 @@ local function create_titlebar(parent, available_size)
         type = 'sprite-button',
         style = 'close_button',
         name = CLOSE_BUTTON,
-        sprite = 'utility/close_white',
+        sprite = 'utility/close',
         hovered_sprite = 'utility/close_black',
         clicked_sprite = 'utility/close_black',
         tooltip = { 'memorycards-editor.close', },
@@ -294,9 +294,10 @@ local function draw_signals(gui_info, signals, style)
             sprite = 'virtual-signal/' .. signal.signal.name
             tooltip = {
                 type = 'signal',
+                signal_type = 'virtual',
                 name = signal.signal.name,
             }
-        elseif signal.signal.type == 'item' then
+        elseif signal.signal.type == nil or signal.signal.type == 'item' then
             sprite = 'item/' .. signal.signal.name
             tooltip = {
                 type = 'item',
@@ -310,7 +311,7 @@ local function draw_signals(gui_info, signals, style)
             }
         end
 
-        if not game.is_valid_sprite_path(sprite) then
+        if not helpers.is_valid_sprite_path(sprite) then
             sprite = 'utility/questionmark'
         end
 
