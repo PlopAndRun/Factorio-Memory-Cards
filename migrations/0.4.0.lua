@@ -44,6 +44,7 @@ local function reattach_wires(from, to)
 end
 
 local function update_readers()
+    if storage.readers == nil then return end
     for _, holder in pairs(storage.readers) do
         local cell = holder.diagnostics_cell
         local cb = cell.get_or_create_control_behavior()
@@ -80,6 +81,7 @@ local function transfer_inventories(old_writer, new_writer)
 end
 
 local function update_writers()
+    if storage.writers == nil then return end
     local writers = {}
     for _, holder in pairs(storage.writers) do
         local old_writer = holder.writer
