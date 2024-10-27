@@ -12,6 +12,7 @@ local item = {
     localised_name = { 'item-name.memorycard', },
     localised_description = { 'description.memorycard-empty', },
     flags = { 'not-stackable', },
+    weight = 2000,
 }
 
 local recipe = {
