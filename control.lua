@@ -173,6 +173,7 @@ local function on_player_setup_blueprint(event)
 end
 
 script.on_event(defines.events.on_built_entity, on_built)
+script.on_event(defines.events.on_space_platform_built_entity, on_built)
 script.on_event(defines.events.on_robot_built_entity, on_built)
 script.on_event(defines.events.script_raised_revive, on_built)
 script.on_event(defines.events.on_entity_cloned, on_cloned)
@@ -182,6 +183,7 @@ script.on_event(defines.events.on_pre_surface_deleted, on_surface_erased)
 
 script.on_event(defines.events.on_pre_player_mined_item, on_destroyed)
 script.on_event(defines.events.on_robot_pre_mined, on_destroyed)
+script.on_event(defines.events.on_space_platform_mined_entity, on_destroyed)
 script.on_event(defines.events.on_entity_died, on_destroyed)
 script.on_event(defines.events.script_raised_destroy, on_destroyed_from_script)
 

@@ -5,12 +5,13 @@ _M.other_mods = {
 }
 
 function _M.spill_items(surface, position, force, inventory)
-    for _, index in pairs(inventory.get_contents()) do
-        local item = inventory[index]
-        local spilled = surface.spill_item_stack(position, item, false, force, false)
-        for _, entity in pairs(spilled) do
-            entity.order_deconstruction(force)
-        end
+    for index = 1, #inventory do
+        surface.spill_item_stack {
+            position = position,
+            stack = inventory[index],
+            force = force,
+            allow_belts = false,
+        }
     end
 end
 
@@ -18,7 +19,7 @@ function _M.fast_insert(player, entity)
     if not player.cursor_stack then return end
     if not entity then return end
     if entity.insert(player.cursor_stack) > 0 then
-        player.play_sound({ path = 'utility/inventory_move' })
+        player.play_sound({ path = 'utility/inventory_move', })
         player.cursor_stack.clear()
     end
 end
@@ -37,7 +38,7 @@ function _M.add_recipe_to_unlocks(recipe)
 end
 
 function _M.trim_string(str)
-    return str:gsub("^%s*(.-)%s*$", "%1")
+    return str:gsub('^%s*(.-)%s*$', '%1')
 end
 
 function _M.trim_nilable_string(str)

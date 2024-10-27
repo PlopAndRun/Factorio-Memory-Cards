@@ -2,6 +2,7 @@
 Version: 0.4.3
 Date: -
   Compatibility:
+    - Space Age: correct construction and deconstruction by the space platform
     - Space Age: set the weight of a memory card to 2kg
 
 ---------------------------------------------------------------------------------------------------
