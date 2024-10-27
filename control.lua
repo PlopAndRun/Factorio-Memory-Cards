@@ -76,7 +76,19 @@ end
 local function on_gui_opened(event)
     local entity = event.entity
     if not entity then return end
-    if entity.name == names.reader.SIGNAL_SENDER then
+
+    if entity.name == 'entity-ghost' then
+        if (entity.ghost_name == names.reader.SIGNAL_SENDER or
+                entity.ghost_name == names.writer.BUILDING)
+        then
+            -- TODO: implement ghost editing
+            local player = game.players[event.player_index]
+            if player ~= nil then
+                player.opened = nil
+                game.print('Ghost editing for memory cards is coming soon')
+            end
+        end
+    elseif entity.name == names.reader.SIGNAL_SENDER then
         reader.on_gui_opened(entity, event.player_index)
     elseif entity.name == names.writer.BUILDING then
         writer.on_gui_opened(entity, event.player_index)
