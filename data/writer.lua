@@ -37,7 +37,7 @@ local building = {
     name = names.writer.BUILDING,
     localised_name = { 'item-name.memorycard-writer', },
     localised_description = { 'description.memorycard-writer', },
-    flags = { 'player-creation', },
+    flags = { 'player-creation', 'not-rotatable', },
     subgroup = 'circuit-network',
 
     -- crafting

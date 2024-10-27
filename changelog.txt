@@ -3,6 +3,7 @@ Version: 0.4.2
 Date: -
   Bugfixes:
     - Fixed a crash when opening a scenario with Map editor -> Edit scenario
+    - Fixed the writer missing the not-rotatable flag
 
 ---------------------------------------------------------------------------------------------------
 Version: 0.4.1
