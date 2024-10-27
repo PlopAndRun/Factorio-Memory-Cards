@@ -15,12 +15,15 @@ function _M.readers()
     return storage.readers or {}
 end
 
-function _M.editor_ui(player_index)
-    local players = storage.players
-    if players == nil then
-        players = {}
-        storage.players = players
+function _M.players()
+    if storage.players == nil then
+        storage.players = {}
     end
+    return storage.players
+end
+
+function _M.editor_ui(player_index)
+    local players = _M.players()
     local player = players[player_index]
     if player == nil then
         player = {}
@@ -35,8 +38,7 @@ function _M.editor_ui(player_index)
 end
 
 function _M.on_player_removed(player_index)
-    if storage.players == {} then return end
-    storage.players[player_index] = nil
+   _M.players()[player_index] = nil
 end
 
 function _M.register_writer(writer)
