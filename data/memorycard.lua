@@ -23,6 +23,7 @@ local recipe = {
         { type = 'item', name = 'electronic-circuit', amount = 1, },
         { type = 'item', name = 'plastic-bar',        amount = 1, },
     },
+    allow_quality = false,
     enabled = false,
     order = 'c[combinators]-m[memorycard]',
 }

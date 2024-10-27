@@ -50,15 +50,13 @@ local function create_cells_for_channel(cells, holder, data, connect_red, connec
             value = {
                 type = value.signal.type or 'item',
                 name = value.signal.name,
-                quality = 'normal',
+                quality = value.signal.quality or 'normal',
                 comparator = '=',
             },
             min = value.count,
         }
     end
     section.filters = filters
-
-    return cells
 end
 
 local function create_cells(holder, card)
