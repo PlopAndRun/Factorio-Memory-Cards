@@ -22,6 +22,9 @@ function _M.create_machine_options_window(options)
         gui = options.anchor_gui,
         position = defines.relative_gui_position.right,
     }
+    if gui[options.window_name] ~= nil then
+        gui[options.window_name].destroy()
+    end
     local window = gui.add {
         type = 'frame',
         direction = 'vertical',

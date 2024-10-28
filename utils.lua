@@ -4,6 +4,22 @@ _M.other_mods = {
     ULTRACUBE = mods and mods['Ultracube'],
 }
 
+function _M.set_tag(entity, name, value)
+    local tags = entity.tags
+    tags[name] = value
+    entity.tags = tags
+end
+
+function _M.get(table, field, default)
+    if not table then return default end
+    local value = table[field]
+    if value ~= nil then
+        return value
+    else
+        return default
+    end
+end
+
 function _M.spill_items(surface, position, force, inventory)
     for index = 1, #inventory do
         surface.spill_item_stack {
@@ -142,5 +158,13 @@ _M.names.memorycard_editor.gui.PATTERN = '^' .. _M.names.memorycard_editor.gui.N
     :gsub('%-', '%%-')
     :gsub('%.', '%%.')
 
+_M.tags = {
+    opened_by = _M.names.MOD_PREFIX .. 'opened-by',
+    writer = {
+        USE_CHANNELS_TAG = _M.names.MOD_PREFIX .. 'use-channels',
+        LABEL_TAG = _M.names.MOD_PREFIX .. 'label',
+        LIST_CONTENTS_TAG = _M.names.MOD_PREFIX .. 'list-contents',
+    },
+}
 
 return _M

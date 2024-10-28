@@ -29,13 +29,21 @@ local function on_cloned(event)
     end
 end
 
+local function real_or_ghost_name(entity)
+    if entity.name == 'entity-ghost' then
+        return entity.ghost_name
+    else
+        return entity.name
+    end
+end
+
 local function on_entity_settings_pasted(event)
     local source = event.source
     local destination = event.destination
-    if (source.name == names.writer.BUILDING or source.name == names.writer.SIGNAL_RECEIVER)
-        and (destination.name == names.writer.BUILDING or destination.name == names.writer.SIGNAL_RECEIVER)
-    then
-        writer.copy_settings(source, destination)
+    local source_name = real_or_ghost_name(source)
+    local destination_name = real_or_ghost_name(destination)
+    if source_name == names.writer.BUILDING and destination_name == names.writer.BUILDING then
+        writer.copy_settings(source, destination, event.player_index)
     elseif (source.name == names.reader.SIGNAL_SENDER or source.name == names.reader.CONTAINER)
         and (destination.name == names.reader.SIGNAL_SENDER or destination.name == names.reader.CONTAINER)
     then
@@ -78,9 +86,9 @@ local function on_gui_opened(event)
     if not entity then return end
 
     if entity.name == 'entity-ghost' then
-        if (entity.ghost_name == names.reader.SIGNAL_SENDER or
-                entity.ghost_name == names.writer.BUILDING)
-        then
+        if entity.ghost_name == names.writer.BUILDING then
+            writer.on_ghost_gui_opened(entity, event.player_index)
+        elseif entity.ghost_name == names.reader.SIGNAL_SENDER then
             -- TODO: implement ghost editing
             local player = game.players[event.player_index]
             if player ~= nil then
@@ -98,7 +106,8 @@ end
 local function on_gui_closed(event)
     local entity = event.entity
     if not entity then return end
-    if entity.name == names.writer.BUILDING or entity.name == names.writer.SIGNAL_RECEIVER then
+    local name = real_or_ghost_name(entity)
+    if name == names.writer.BUILDING then
         writer.on_gui_closed(entity, event.player_index)
     elseif entity.name == names.reader.CONTAINER or entity.name == names.reader.SIGNAL_SENDER then
         reader.on_gui_closed(entity, event.player_index)
