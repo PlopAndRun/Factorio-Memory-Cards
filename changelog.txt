@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.4.4
+  Bugfixes:
+    - Fixed missing sound when pasting reader/writer settings
+    - Fixed copy-pasting operations involving reader/writer ghosts
+  Features:
+    - Added ability to change writer (not reader) settings in ghost form
+
+---------------------------------------------------------------------------------------------------
 Version: 0.4.3
 Date: 27.10.2024
   Compatibility:

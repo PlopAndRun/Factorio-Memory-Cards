@@ -1,4 +1,5 @@
 local styles = require('utils').names.styles
+local persistence = require 'persistence'
 
 local _M = {}
 
@@ -14,6 +15,15 @@ local function create_titlebar(parent, title)
         caption = title,
         ignored_by_interaction = true,
     }
+end
+
+function _M.get_machine_gui_info(player_index)
+    local player = game.get_player(player_index)
+    if player == nil then return nil end
+    local gui_info = persistence.machine_ui(player_index)
+    if gui_info == nil then return nil end
+    if gui_info.ghost and gui_info.ghost.valid == false then return nil end
+    return gui_info
 end
 
 function _M.create_machine_options_window(options)

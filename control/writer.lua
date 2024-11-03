@@ -74,7 +74,7 @@ function _M.on_ghost_gui_opened(writer, player_index)
         if tags[utils.tags.opened_by] == nil then
             tags[utils.tags.opened_by] = {}
         end
-        tags[utils.tags.opened_by][player_index] = true
+        tags[utils.tags.opened_by][tostring(player_index)] = true
         writer.tags = tags
         gui.open_options_gui(player, { ghost = writer, })
     end
@@ -167,6 +167,7 @@ end
 
 function _M.copy_settings(source, destination, player_index)
     local options = read_options(source)
+    if not options then return end
     if write_options(destination, options) then
         local player = game.players[player_index]
         player.play_sound { path = 'utility/entity_settings_pasted', }

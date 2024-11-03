@@ -2,10 +2,9 @@ local persistence = require 'persistence'
 local memorycard = require 'control.memorycard'
 local utils = require 'utils'
 local names = utils.names
+local tag_names = utils.tags.reader
 local gui = require 'control.reader_gui'
 local _M = {}
-
-local DIAGNOSTICS = names.MOD_PREFIX .. 'diagnostics-channel'
 
 local function find_chest(entity)
     return entity.surface.find_entity(names.reader.CONTAINER, entity.position)
@@ -131,8 +130,8 @@ function _M.on_built(sender, tags)
     inventory.set_filter(1, names.memorycard.ITEM)
     local holder = persistence.register_reader(sender, reader, diagnostics)
     if tags then
-        if tags[DIAGNOSTICS] ~= nil then
-            holder.options.diagnostics_channel = tags[DIAGNOSTICS]
+        if tags[tag_names.DIAGNOSTICS] ~= nil then
+            holder.options.diagnostics_channel = tags[tag_names.DIAGNOSTICS]
         end
     end
     _M.apply_options(holder)
@@ -226,7 +225,8 @@ function _M.on_gui_opened(entity, player_index)
     local player = game.get_player(player_index)
     if chest and player then
         game.get_player(player_index).opened = chest
-        gui.open_options_gui(player, persistence.readers()[chest.unit_number])
+        local holder = persistence.readers()[chest.unit_number]
+        gui.open_options_gui(player, holder)
     end
 end
 
@@ -254,17 +254,42 @@ function _M.save_blueprint_data(entity, blueprint, index)
     if chest == nil then return end
     local holder = persistence.readers()[chest.unit_number]
     if holder == nil then return end
-    blueprint.set_blueprint_entity_tag(index, DIAGNOSTICS, holder.options.diagnostics_channel)
+    blueprint.set_blueprint_entity_tag(index, tag_names.DIAGNOSTICS, holder.options.diagnostics_channel)
 end
 
-function _M.copy_settings(source, destination)
-    local source_reader = find_chest(source)
-    local destination_reader = find_chest(destination)
-    local source_holder = persistence.readers()[source_reader.unit_number]
-    local destination_holder = persistence.readers()[destination_reader.unit_number]
-    if source_holder and destination_holder then
-        persistence.copy_reader_options(source_holder, destination_holder)
-        _M.apply_options(destination_holder)
+local function read_options(machine)
+    if machine.tags ~= nil then
+        return {
+            diagnostics_channel = machine.tags[tag_names.DIAGNOSTICS],
+        }
+    end
+    local reader = find_chest(machine)
+    if not reader then return {} end
+    local holder = persistence.readers()[reader.unit_number]
+    return holder and holder.options or {}
+end
+
+local function write_options(machine, options)
+    if machine.name == 'entity-ghost' then
+        local tags = machine.tags or {}
+        tags[tag_names.DIAGNOSTICS] = options.diagnostics_channel
+        machine.tags = tags
+        return true
+    end
+    local reader = find_chest(machine)
+    if not reader then return false end
+    local holder = persistence.readers()[reader.unit_number]
+    if holder == nil then return false end
+    persistence.copy_reader_options({ options = options, }, holder)
+    _M.apply_options(holder)
+end
+
+function _M.copy_settings(source, destination, player_index)
+    local options = read_options(source)
+    if not options then return end
+    if write_options(destination, options) then
+        local player = game.players[player_index]
+        player.play_sound { path = 'utility/entity_settings_pasted', }
     end
 end
 

@@ -13,6 +13,10 @@ _M.DEFAULT_WRITER_OPTIONS = {
     list_contents = true,
 }
 
+_M.DEFAULT_READER_OPTIONS = {
+    diagnostics_channel = _M.CHANNEL_OPTION.BOTH,
+}
+
 function _M.writers()
     return storage.writers or {}
 end
@@ -47,7 +51,7 @@ function _M.machine_ui(player_index)
     local players = _M.players()
     local player = players[player_index]
     if player == nil then
-        player                = {}
+        player = {}
         players[player_index] = player
     end
     local machine_ui = player.machine_ui
@@ -88,10 +92,9 @@ function _M.register_reader(sender, reader, diagnostics_cell)
         sender = sender,
         reader = reader,
         diagnostics_cell = diagnostics_cell,
-        options = {
-            diagnostics_channel = _M.CHANNEL_OPTION.BOTH,
-        },
+        options = {},
     }
+    _M.copy_reader_options({ options = _M.DEFAULT_READER_OPTIONS, }, holder)
     if not storage.readers then storage.readers = {} end
     storage.readers[reader.unit_number] = holder
     return holder

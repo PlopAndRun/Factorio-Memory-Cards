@@ -44,10 +44,10 @@ local function on_entity_settings_pasted(event)
     local destination_name = real_or_ghost_name(destination)
     if source_name == names.writer.BUILDING and destination_name == names.writer.BUILDING then
         writer.copy_settings(source, destination, event.player_index)
-    elseif (source.name == names.reader.SIGNAL_SENDER or source.name == names.reader.CONTAINER)
-        and (destination.name == names.reader.SIGNAL_SENDER or destination.name == names.reader.CONTAINER)
+    elseif (source_name == names.reader.SIGNAL_SENDER or source_name == names.reader.CONTAINER)
+        and (destination_name == names.reader.SIGNAL_SENDER or destination_name == names.reader.CONTAINER)
     then
-        reader.copy_settings(source, destination)
+        reader.copy_settings(source, destination, event.player_index)
     end
 end
 
@@ -89,11 +89,10 @@ local function on_gui_opened(event)
         if entity.ghost_name == names.writer.BUILDING then
             writer.on_ghost_gui_opened(entity, event.player_index)
         elseif entity.ghost_name == names.reader.SIGNAL_SENDER then
-            -- TODO: implement ghost editing
             local player = game.players[event.player_index]
             if player ~= nil then
                 player.opened = nil
-                game.print('Ghost editing for memory cards is coming soon')
+                game.print('Cannot edit reader settings in a ghost form')
             end
         end
     elseif entity.name == names.reader.SIGNAL_SENDER then

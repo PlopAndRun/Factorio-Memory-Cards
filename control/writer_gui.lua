@@ -13,15 +13,6 @@ local LIST_CONTENTS_IN_DESCRIPTION = GUI_PREFIX .. '.list-contents'
 local USE_CHANNELS = GUI_PREFIX .. '.use-channels'
 local WINDOW = GUI_PREFIX .. '.window'
 
-local function get_gui_info(player_index)
-    local player = game.get_player(player_index)
-    if player == nil then return nil end
-    local gui_info = persistence.machine_ui(player_index)
-    if gui_info == nil then return nil end
-    if gui_info.ghost and gui_info.ghost.valid == false then return nil end
-    return gui_info
-end
-
 local function get_use_channels(gui_info)
     if gui_info.holder then
         return gui_info.holder.options.use_channels
@@ -180,7 +171,7 @@ function _M.open_options_gui(player, info)
 end
 
 function _M.on_gui_click(player_index, element)
-    local gui_info = get_gui_info(player_index)
+    local gui_info = gui_utils.get_machine_gui_info(player_index)
     if gui_info == nil then return end
 
     if element.name == EDIT_LABEL_BUTTON then
@@ -202,7 +193,7 @@ function _M.on_gui_click(player_index, element)
 end
 
 function _M.on_gui_checked_state_changed(player_index, element)
-    local gui_info = get_gui_info(player_index)
+    local gui_info = gui_utils.get_machine_gui_info(player_index)
     if gui_info == nil then return end
 
     if element.name == USE_CHANNELS then

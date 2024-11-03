@@ -165,6 +165,9 @@ _M.tags = {
         LABEL_TAG = _M.names.MOD_PREFIX .. 'label',
         LIST_CONTENTS_TAG = _M.names.MOD_PREFIX .. 'list-contents',
     },
+    reader = {
+        DIAGNOSTICS = _M.names.MOD_PREFIX .. 'diagnostics'
+    }
 }
 
 return _M
