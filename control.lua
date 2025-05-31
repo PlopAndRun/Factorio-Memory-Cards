@@ -121,10 +121,15 @@ local function on_player_fast_transferred(event)
         reader.on_player_fast_inserted(entity, game.get_player(event.player_index))
     end
 end
+
 local function on_lua_shortcut(event)
     if event.prototype_name == names.memorycard_editor.SHORTCUT then
         memorycard_editor.on_lua_shortcut(event.player_index)
     end
+end
+
+local function on_editor_hotkey(event)
+    memorycard_editor.on_lua_shortcut(event.player_index)
 end
 
 local function on_gui_click(event)
@@ -213,6 +218,7 @@ script.on_event(defines.events.on_gui_opened, on_gui_opened)
 script.on_event(defines.events.on_gui_closed, on_gui_closed)
 script.on_event(defines.events.on_player_fast_transferred, on_player_fast_transferred)
 script.on_event(defines.events.on_lua_shortcut, on_lua_shortcut)
+script.on_event(names.memorycard_editor.HOTKEY, on_editor_hotkey)
 script.on_event(defines.events.on_gui_click, on_gui_click)
 script.on_event(defines.events.on_gui_checked_state_changed, on_gui_checked_state_changed)
 script.on_event(defines.events.on_gui_switch_state_changed, on_gui_switch_state_changed)

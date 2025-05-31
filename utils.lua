@@ -151,6 +151,7 @@ _M.names.signal.INSERTED = _M.names.MOD_PREFIX .. 'signal-inserted'
 
 _M.names.memorycard_editor = {}
 _M.names.memorycard_editor.SHORTCUT = _M.names.MOD_PREFIX .. 'memorycard-editor-shortcut'
+_M.names.memorycard_editor.HOTKEY = _M.names.MOD_PREFIX .. 'memorycard-editor-hotkey'
 _M.names.memorycard_editor.PLACEHOLDER_SPRITE = _M.names.MOD_PREFIX .. 'memorycard-editor-placeholder'
 _M.names.memorycard_editor.gui = {}
 _M.names.memorycard_editor.gui.NAME = _M.names.MOD_PREFIX .. 'memorycard-editor-gui'

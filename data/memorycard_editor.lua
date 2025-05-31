@@ -21,8 +21,20 @@ local placeholder_sprite = {
     },
 }
 
+local hotkey = {
+    type = 'custom-input',
+    name = names.memorycard_editor.HOTKEY,
+    localised_name = { 'memorycards-editor.hotkey', },
+    consuming = 'game-only',
+    key_sequence = 'ALT + M',
+}
+
 return {
     register = function ()
-        data:extend({ shortcut, placeholder_sprite, })
+        data:extend {
+            shortcut,
+            placeholder_sprite,
+            hotkey,
+        }
     end,
 };
