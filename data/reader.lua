@@ -16,6 +16,7 @@ local inventory = {
     destructible = false,
     selection_box = { { -0.5, -0.5, }, { 0.5, 0.5, }, },
     selectable_in_game = false,
+    hidden_in_factoriopedia = true,
     minable = { mining_time = data.raw['constant-combinator']['constant-combinator'].minable.mining_time, },
     inventory_type = 'with_filters_and_bar',
     se_allow_in_space = true,
@@ -44,6 +45,7 @@ combinator_cell.draw_circuit_wires = false
 combinator_cell.selectable_in_game = false
 combinator_cell.se_allow_in_space = true
 combinator_cell.collision_mask = { layers = {}, }
+combinator_cell.hidden_in_factoriopedia = true
 
 local diagnostics_cell = table.deepcopy(combinator_cell)
 diagnostics_cell.name = names.reader.SIGNAL_DIAGNOSTICS_CELL
